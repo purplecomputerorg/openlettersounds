@@ -1,0 +1,8 @@
+# third-party references (checked against, never redistributed), model weights, raw takes, review builds
+refs/
+models/
+takes/
+build/
+__pycache__/
+*.egg-info/
+.venv/

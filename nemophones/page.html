@@ -1,0 +1,45 @@
+<title>Nemophones Review</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* One listening table: letter, references, passing takes (best first), rejected takes with reasons */
+:root{--bg:#f8f8fb;--fg:#1d1b29;--muted:#66637a;--line:#e1dfea;--accent:#3d5afe;--chip:#eceef8;--rej:#a3404a;
+--display:"Fredoka",ui-rounded,system-ui,sans-serif;--body:"Atkinson Hyperlegible",system-ui,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13131a;--fg:#e9e8f2;--muted:#9c99b3;--line:#2b2a38;--accent:#8c9eff;--chip:#1f2030;--rej:#f0909a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#13131a;--fg:#e9e8f2;--muted:#9c99b3;--line:#2b2a38;--accent:#8c9eff;--chip:#1f2030;--rej:#f0909a;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;padding-block:32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:1100px;margin:0 auto;display:grid;gap:20px}
+h1{font-family:var(--display);font-weight:600;font-size:2rem;margin:0;color:var(--accent);text-wrap:balance}
+p{margin:0;max-width:72ch;color:var(--muted)}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:760px}
+th,td{padding:10px 8px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
+thead th{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-top:0}
+tbody th{display:grid;gap:2px;min-width:7em}
+.L{font-family:var(--display);font-size:1.8rem;font-weight:600;color:var(--accent);line-height:1}
+.ipa{font-family:var(--mono);font-size:.9rem}.ex{color:var(--muted);font-size:.8rem}
+.alts{display:flex;flex-wrap:wrap;gap:6px}
+.clip{font:inherit;font-size:.85rem;display:inline-flex;flex-direction:column;align-items:flex-start;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--chip);color:var(--fg);cursor:pointer;max-width:16em;text-align:left}
+.clip.pick{border-color:var(--accent);font-weight:600}
+.clip.rej{background:transparent;opacity:.8}.clip.rej small{color:var(--rej)}
+.clip small{font-weight:400;color:var(--muted);font-size:.72rem}
+.clip:hover,.clip:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.clip.playing{background:var(--accent);color:var(--bg)}.clip.playing small{color:var(--bg)}
+em{color:var(--rej)}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@600&display=swap">
+<main>
+<h1>Nemophones review</h1>
+<p>References first: Feed the Monster (US, Australian, South African) and the Wikimedia phonetician clip (C and Q use K; X has none). Then takes from gpt-audio-1.5 (voice marin) that passed every automatic check, trimmed and level-matched, ordered by closeness to the references ("sim": lower is closer). The highlighted take is in the library now. Rejected takes are last, each with the reason it failed.</p>
+<div class="wrap"><table>
+<thead><tr><th>Sound</th><th>References</th><th>Passed</th><th>Rejected</th></tr></thead>
+<tbody>
+{{ROWS}}
+</tbody></table></div>
+</main>
+<script>
+let cur=null,curBtn=null;
+document.addEventListener("click",e=>{const b=e.target.closest("button.clip");if(!b)return;
+if(cur){cur.pause();curBtn.classList.remove("playing")}
+cur=new Audio(b.dataset.src);curBtn=b;b.classList.add("playing");
+cur.onended=()=>b.classList.remove("playing");cur.play().catch(()=>b.classList.remove("playing"))});
+</script>
