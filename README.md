@@ -12,6 +12,10 @@ Open phonics sounds: one clean clip per letter sound, free for any use.
 4. **Finish.** The best take is trimmed to the sound, long holds are capped with a fade, and every clip is set to the same loudness.
 5. **Listen.** `build/review.html` shows references, passing takes and rejected takes with reasons, for a final human pass.
 
+### Why an audio language model, not text to speech
+
+Text to speech engines (Piper, Kokoro, ElevenLabs and the like) speak whatever text they are given. A pure sound has no spelling they can read: "b" comes out as "bee", "buh" keeps the "uh" phonics teachers avoid, and a description of the sound is read aloud. Cutting the sound out of a spoken word leaves clicks and pieces of the next vowel. An audio language model like `gpt-audio-1.5` instead takes the description as instructions for how to speak ("clipped, voiced, no vowel after it"), so the sound can be specified in words. TTS can still do well on sounds that spell easily ("mmm", "sss") and on vowels; the checks below do not care where a take comes from, so another generator could be added as a second voice and compared on the same terms.
+
 ### Worked example: B
 
 **The spec.** One line in `nemophones/sounds.py`:
