@@ -1,13 +1,13 @@
-"""python -m nemophones {refs | generate | check | page | all} [letters] [--takes N]"""
+"""python -m nemophones {refs | generate | check | page | site | all} [letters] [--takes N]"""
 import argparse
 
-from . import check, generate, page, refs
+from . import check, generate, page, refs, site
 from .sounds import BY_LETTER, SOUNDS
 
 
 def main():
     ap = argparse.ArgumentParser(prog="nemophones")
-    ap.add_argument("step", choices=("refs", "generate", "check", "page", "all"))
+    ap.add_argument("step", choices=("refs", "generate", "check", "page", "site", "all"))
     ap.add_argument("letters", nargs="?", default="", help="e.g. bdg; default all")
     ap.add_argument("--takes", type=int, default=10)
     a = ap.parse_args()
@@ -20,6 +20,8 @@ def main():
         check.run(sounds)
     if a.step in ("page", "all"):
         page.build()
+    if a.step in ("site", "all"):
+        site.build()
 
 
 main()

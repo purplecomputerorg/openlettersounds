@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nemophones Picks</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@600&display=swap">
+<style>
+:root{--bg:#f8f8fb;--card:#fff;--fg:#1d1b29;--muted:#66637a;--line:#e1dfea;--accent:#3d5afe;--chip:#eceef8;--star:#d08a00;
+--display:"Fredoka",ui-rounded,system-ui,sans-serif;--body:"Atkinson Hyperlegible",system-ui,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13131a;--card:#1a1a24;--fg:#e9e8f2;--muted:#9c99b3;--line:#2b2a38;--accent:#8c9eff;--chip:#24253a;--star:#ffc24d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#13131a;--card:#1a1a24;--fg:#e9e8f2;--muted:#9c99b3;--line:#2b2a38;--accent:#8c9eff;--chip:#24253a;--star:#ffc24d;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5}
+main{max-width:760px;margin:0 auto;padding:32px 16px 120px;display:grid;gap:16px}
+h1{font-family:var(--display);font-weight:600;font-size:2.2rem;margin:0;color:var(--accent)}
+p{margin:0;color:var(--muted);max-width:62ch}
+a{color:var(--accent)}
+kbd{font-family:var(--mono);font-size:.85em;border:1px solid var(--line);border-radius:4px;padding:0 4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;grid-template-columns:4.5rem 1fr;gap:12px 16px;scroll-margin-top:16px}
+.card.done{border-color:var(--accent)}
+.head{display:grid;align-content:start;gap:2px}
+.L{font-family:var(--display);font-size:2.6rem;font-weight:600;color:var(--accent);line-height:1}
+.ipa{font-family:var(--mono);font-size:.9rem}
+.ex{color:var(--muted);font-size:.85rem}
+.takes{display:flex;flex-wrap:wrap;gap:8px;align-content:start}
+.take{display:inline-flex;border:1px solid var(--line);border-radius:12px;background:var(--chip);overflow:hidden}
+.take button{font:inherit;background:none;border:0;color:var(--fg);cursor:pointer;padding:8px 12px;min-height:44px}
+.take .play{display:grid;justify-items:start;line-height:1.2}
+.take .play small{font-size:.7rem;color:var(--muted)}
+.take .star{border-left:1px solid var(--line);font-size:1.1rem;color:var(--muted);padding:8px 10px}
+.take.mine{border-color:var(--star)}.take.mine .star{color:var(--star)}
+.take.playing{background:var(--accent)}.take.playing .play,.take.playing .play small{color:var(--bg)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.none{color:var(--muted);font-style:italic}
+.bar{position:fixed;inset:auto 0 0 0;background:var(--card);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
+.bar div{max-width:760px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.bar span{flex:1 1 10em;color:var(--muted)}
+.btn{font:inherit;font-weight:700;border-radius:10px;padding:10px 16px;cursor:pointer;border:1px solid var(--accent);background:none;color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--bg)}
+@media (max-width:480px){.card{grid-template-columns:1fr}.head{grid-template-columns:auto 1fr;align-items:baseline;gap:4px 12px}.ex{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<main>
+<h1>Nemophones</h1>
+<p>Free phonics sounds, one clip per letter sound (<a href="https://github.com/tavinathanson/nemophones">repo</a>, CC0). Each letter shows every generated take that passed the automatic checks, best guess first; <b>now</b> marks the one in the library today. Tap a take to hear it, tap ★ to pick it. Your picks stay in this browser until you send them.</p>
+<p>On a keyboard, press a letter to jump there and hear your pick.</p>
+<div id="cards"></div>
+</main>
+<div class="bar"><div>
+<span id="count"></span>
+<button class="btn" id="playall">Play A to Z</button>
+<button class="btn primary" id="send">Send my picks</button>
+</div></div>
+<script>
+const REPO="https://github.com/tavinathanson/nemophones";
+const KEY="nemophones-picks";
+let picks={};
+try{picks=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(picks))}catch(e){}};
+let letters=[],audio=null,playingEl=null,queue=[];
+
+function play(file,el,next){
+  if(audio){audio.pause();playingEl?.classList.remove("playing")}
+  audio=new Audio(file);playingEl=el;el?.classList.add("playing");
+  const done=()=>{el?.classList.remove("playing");if(next)setTimeout(next,450)};
+  audio.onended=done;audio.play().catch(done);
+}
+const chosen=l=>l.takes.find(t=>t.n===picks[l.letter])||l.takes.find(t=>t.pick)||l.takes[0];
+const takeEl=(l,t)=>document.querySelector(`#card-${l.letter} [data-n="${t.n}"]`);
+
+function render(){
+  document.getElementById("cards").innerHTML=letters.map(l=>`
+  <section class="card${picks[l.letter]?" done":""}" id="card-${l.letter}">
+    <div class="head"><span class="L">${l.letter.toUpperCase()}</span><span class="ipa">${l.ipa}</span><span class="ex">${l.keywords.join(", ")}</span></div>
+    <div class="takes">${l.takes.length?l.takes.map(t=>`
+      <span class="take${picks[l.letter]===t.n?" mine":""}" data-n="${t.n}">
+        <button class="play" data-l="${l.letter}" data-n="${t.n}">take ${t.n}<small>${t.pick?"now":"&nbsp;"}</small></button>
+        <button class="star" data-l="${l.letter}" data-n="${t.n}" aria-label="Pick take ${t.n} for ${l.letter.toUpperCase()}">★</button>
+      </span>`).join(""):`<span class="none">No take passed yet.</span>`}</div>
+  </section>`).join("");
+  const n=letters.filter(l=>picks[l.letter]).length;
+  document.getElementById("count").textContent=`${n} of ${letters.length} letters picked`;
+}
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.id==="playall"){queue=letters.filter(l=>l.takes.length);const step=()=>{const l=queue.shift();if(l){const t=chosen(l);play(t.file,takeEl(l,t),step)}};step();return}
+  if(b.id==="send")return send();
+  const l=letters.find(x=>x.letter===b.dataset.l);if(!l)return;
+  const t=l.takes.find(x=>x.n===+b.dataset.n);queue=[];
+  if(b.classList.contains("star")){picks[l.letter]=picks[l.letter]===t.n?undefined:t.n;save();render();takeEl(l,t).querySelector(".star").focus()}
+  else play(t.file,b.parentElement);
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey||e.target.closest("input,textarea"))return;
+  const l=letters.find(x=>x.letter===e.key.toLowerCase());if(!l||!l.takes.length)return;
+  const card=document.getElementById(`card-${l.letter}`);card.scrollIntoView({behavior:"smooth",block:"center"});
+  const t=chosen(l);queue=[];play(t.file,takeEl(l,t));
+});
+
+function send(){
+  const lines=letters.filter(l=>picks[l.letter]).map(l=>`${l.letter}: take ${picks[l.letter]}`);
+  if(!lines.length){alert("Pick at least one take first: tap ★ next to the one that sounds best.");return}
+  const body=`My picks:\n\n${lines.join("\n")}\n\nNotes (optional):\n`;
+  window.open(`${REPO}/issues/new?title=${encodeURIComponent(`Picks (${lines.length} letters)`)}&body=${encodeURIComponent(body)}`,"_blank");
+}
+
+fetch("takes.json").then(r=>r.json()).then(d=>{letters=d;render()});
+</script>
+</body>
+</html>

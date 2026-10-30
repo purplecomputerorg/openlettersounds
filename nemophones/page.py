@@ -14,14 +14,18 @@ OGG = ROOT / "build" / "ogg"
 REF_LABEL = {"ftm-us": "US", "ftm-au": "Australian", "ftm-za": "S. African", "wiki": "Phonetician"}
 
 
-def _uri(path):
-    """Embedded as small Vorbis so 300 clips fit in one page."""
+def ogg(path):
+    """Small Vorbis copy of a clip, so hundreds of them fit in a page."""
     dst = OGG / path.relative_to(ROOT).with_suffix(".ogg")
     if not dst.exists() or dst.stat().st_mtime < path.stat().st_mtime:
         dst.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(path), "-ac", "1", "-c:a", "libvorbis", "-q:a", "4", str(dst)],
                        check=True)
-    return "data:audio/ogg;base64," + base64.b64encode(dst.read_bytes()).decode()
+    return dst
+
+
+def _uri(path):
+    return "data:audio/ogg;base64," + base64.b64encode(ogg(path).read_bytes()).decode()
 
 
 def _btn(label, path, note, cls=""):

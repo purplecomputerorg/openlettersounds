@@ -11,6 +11,8 @@ Open phonics sounds: one clean clip per letter sound, free for any use.
 3. **Rank.** Survivors are ranked by how close they are to reference recordings of the same sound, compared frame by frame on the recognizer's output.
 4. **Listen.** `build/review.html` shows references, passing takes and rejected takes with reasons, for a final human pass.
 
+**[Listen and pick](https://tavinathanson.github.io/nemophones/)**: every passing take per letter. Star the best ones and send your picks as a GitHub issue.
+
 ## Run it
 
 ```bash
@@ -19,6 +21,7 @@ python -m nemophones refs            # download references to refs/ (not redistr
 OPENAI_API_KEY=... python -m nemophones generate [letters] --takes 10
 python -m nemophones check [letters] # gate, rank, write the best take to sounds/
 python -m nemophones page            # build/review.html
+python -m nemophones site            # docs/: the public picking page (GitHub Pages, main /docs)
 ```
 
 Takes are cached by a hash of the model, voice and prompt, so editing a sound's spec starts a fresh set and rerunning is free.
