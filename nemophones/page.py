@@ -5,7 +5,7 @@ import json
 import subprocess
 
 from . import ROOT, refs
-from .check import REPORT
+from .check import LIBRARY, REPORT
 from .generate import take_dir
 from .sounds import SOUNDS
 
@@ -17,7 +17,7 @@ REF_LABEL = {"ftm-us": "US", "ftm-au": "Australian", "ftm-za": "S. African", "wi
 def _uri(path):
     """Embedded as small Vorbis so 300 clips fit in one page."""
     dst = OGG / path.relative_to(ROOT).with_suffix(".ogg")
-    if not dst.exists():
+    if not dst.exists() or dst.stat().st_mtime < path.stat().st_mtime:
         dst.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(path), "-ac", "1", "-c:a", "libvorbis", "-q:a", "4", str(dst)],
                        check=True)
@@ -44,5 +44,7 @@ def _row(s, rows):
 def build():
     report = json.loads(REPORT.read_text())
     body = "\n".join(_row(s, report[s.letter]) for s in SOUNDS if s.letter in report)
-    OUT.write_text((ROOT / "nemophones" / "page.html").read_text().replace("{{ROWS}}", body))
+    final = "".join(_btn(e["letter"].upper(), LIBRARY / e["file"], e["ipa"])
+                    for e in json.loads((LIBRARY / "sounds.json").read_text()))
+    OUT.write_text((ROOT / "nemophones" / "page.html").read_text().replace("{{ROWS}}", body).replace("{{FINAL}}", final))
     print(OUT, OUT.stat().st_size // 1024, "KB")

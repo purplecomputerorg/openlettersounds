@@ -18,7 +18,8 @@ SYSTEM = ("You are an expert early-literacy phonics teacher recording audio for 
           "clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your "
           "entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. "
           "Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. "
-          "Never whisper. Never say the letter name, the example word, or any other words.")
+          "It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper "
+          "and never sound breathy. Never say the letter name, the example word, or any other words.")
 
 
 def prompt(s):

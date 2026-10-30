@@ -57,11 +57,22 @@ def voiced_ms(x, sr):
     return best * 10
 
 
+def bands(x, sr):
+    """Share of the loud part's energy below 1 kHz and above 4 kHz: a clean S lives high, static spreads evenly."""
+    f = sr * FRAME_MS // 1000
+    r = envelope(x, sr)
+    loud = np.concatenate([x[i * f:(i + 1) * f] for i in np.nonzero(r > 0.25 * r.max())[0]])
+    p = np.abs(np.fft.rfft(loud * np.hanning(len(loud)))) ** 2
+    hz = np.fft.rfftfreq(len(loud), 1 / sr)
+    return round(float(p[hz < 1000].sum() / p.sum()), 3), round(float(p[hz > 4000].sum() / p.sum()), 3)
+
+
 def measure(x, sr):
     start, main, end = segments(x, sr)
     r = envelope(x, sr)
+    low, high = bands(x, sr)
     return dict(preroll_ms=int(main - start) * FRAME_MS, sound_ms=int(end - start) * FRAME_MS,
-                loud_ms=int((r > 0.25 * r.max()).sum()) * FRAME_MS, voiced_ms=voiced_ms(x, sr))
+                loud_ms=int((r > 0.25 * r.max()).sum()) * FRAME_MS, voiced_ms=voiced_ms(x, sr), low=low, high=high)
 
 
 def _fade(y, sr, ms_in, ms_out):

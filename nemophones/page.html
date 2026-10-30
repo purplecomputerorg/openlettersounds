@@ -25,11 +25,19 @@ tbody th{display:grid;gap:2px;min-width:7em}
 .clip:hover,.clip:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .clip.playing{background:var(--accent);color:var(--bg)}.clip.playing small{color:var(--bg)}
 em{color:var(--rej)}
+h2{font-family:var(--display);font-weight:600;font-size:1.2rem;margin:0}
+.final{display:grid;gap:10px;padding:16px;border:1px solid var(--line);border-radius:14px}
+.final .clip{min-width:3.2em;align-items:center}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@600&display=swap">
 <main>
 <h1>Nemophones review</h1>
 <p>References first: Feed the Monster (US, Australian, South African) and the Wikimedia phonetician clip (C and Q use K; X has none). Then takes from gpt-audio-1.5 (voice marin) that passed every automatic check, trimmed and level-matched, ordered by closeness to the references ("sim": lower is closer). The highlighted take is in the library now. Rejected takes are last, each with the reason it failed.</p>
+<section class="final">
+<h2>Library picks</h2>
+<div class="alts">{{FINAL}}</div>
+<button id="playall" class="clip pick">Play A to Z<small>one after another</small></button>
+</section>
 <div class="wrap"><table>
 <thead><tr><th>Sound</th><th>References</th><th>Passed</th><th>Rejected</th></tr></thead>
 <tbody>
@@ -37,9 +45,13 @@ em{color:var(--rej)}
 </tbody></table></div>
 </main>
 <script>
-let cur=null,curBtn=null;
-document.addEventListener("click",e=>{const b=e.target.closest("button.clip");if(!b)return;
-if(cur){cur.pause();curBtn.classList.remove("playing")}
+let cur=null,curBtn=null,queue=[];
+function play(b,next){if(cur){cur.pause();curBtn.classList.remove("playing")}
 cur=new Audio(b.dataset.src);curBtn=b;b.classList.add("playing");
-cur.onended=()=>b.classList.remove("playing");cur.play().catch(()=>b.classList.remove("playing"))});
+const done=()=>{b.classList.remove("playing");if(next)setTimeout(next,450)};
+cur.onended=done;cur.play().catch(done)}
+function step(){const b=queue.shift();if(b)play(b,step)}
+document.addEventListener("click",e=>{const b=e.target.closest("button.clip");if(!b)return;
+queue=b.id==="playall"?[...document.querySelectorAll(".final .alts .clip")]:[];
+if(b.id==="playall")step();else play(b)});
 </script>
