@@ -9,7 +9,7 @@ from itertools import permutations
 
 from . import ROOT, api, audio, refs
 
-MODEL = "gpt-audio-1.5"
+MODEL = "gemini-2.5-pro" if api.env("GEMINI_API_KEY") else "gpt-audio-1.5"
 TOP = 6
 CACHE = ROOT / "build" / "judge"
 
@@ -48,13 +48,9 @@ def _verdict(job):
                        .encode()).hexdigest()[:16]
     hit = CACHE / f"{s.letter}-{key}.json"
     if not hit.exists():
-        content = [{"type": "text", "text": "Teachers saying the target sound:"}, *map(api.audio_part, clips[:-2]),
-                   {"type": "text", "text": "Candidate A:"}, api.audio_part(a),
-                   {"type": "text", "text": "Candidate B:"}, api.audio_part(b),
-                   {"type": "text", "text": _ask_text(s)}]
-        msg = api.chat({"model": MODEL, "modalities": ["text"],
-                        "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": content}]})
-        text = msg["content"].strip().removeprefix("```json").strip("`\n ")
+        reply = api.listen(MODEL, SYSTEM, ["Teachers saying the target sound:", *clips[:-2],
+                                           "Candidate A:", a, "Candidate B:", b, _ask_text(s)])
+        text = reply.strip().removeprefix("```json").strip("`\n ")
         verdict = json.loads(text)
         if verdict.get("better") not in ("A", "B"):
             raise ValueError(f"no verdict in {text!r}")

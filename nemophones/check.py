@@ -140,6 +140,8 @@ def run(sounds, use_judge=False):
     meta_path = LIBRARY / "sounds.json"
     library = {e["letter"]: e for e in json.loads(meta_path.read_text())} if meta_path.exists() else {}
     report = json.loads(REPORT.read_text()) if REPORT.exists() else {}
+    if use_judge:
+        print(f"judge: {judge.MODEL}" + ("" if judge.MODEL.startswith("gemini") else " (set GEMINI_API_KEY in .env to use Gemini)"))
     for s in sounds:
         report[s.letter] = judge.rank(s, check(s)) if use_judge else check(s)
         entry = publish(s, report[s.letter])
