@@ -6,10 +6,20 @@ from pathlib import Path
 
 import httpx
 
+from . import ROOT
+
+
+def _key():
+    """OPENAI_API_KEY from the environment, else from the repo's .env."""
+    env = ROOT / ".env"
+    lines = env.read_text().splitlines() if env.exists() else []
+    found = dict(l.split("=", 1) for l in lines if "=" in l and not l.startswith("#"))
+    return os.environ.get("OPENAI_API_KEY") or found.get("OPENAI_API_KEY", "").strip().strip("'\"")
+
 
 def chat(body):
     r = httpx.post("https://api.openai.com/v1/chat/completions", json=body, timeout=120,
-                   headers={"Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}"})
+                   headers={"Authorization": f"Bearer {_key()}"})
     r.raise_for_status()
     return r.json()["choices"][0]["message"]
 

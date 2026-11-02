@@ -64,7 +64,8 @@ The system message is the same for every sound. The user message changes with th
 pip install -e .                     # numpy, onnxruntime, httpx; ffmpeg on PATH
 python -m nemophones refs            # download references to refs/ (not redistributed)
 python -m nemophones prompts [letters] # print the exact messages sent to the model
-OPENAI_API_KEY=... python -m nemophones generate [letters] --takes 10
+cp .env.example .env                 # then put your OpenAI key in .env
+python -m nemophones generate [letters] --takes 10
 python -m nemophones check [letters] [--judge] # gate, rank (--judge: audio model re-ranks the top, needs the key), write the best take to sounds/
 python -m nemophones like b 37       # make take 37 of B its exemplar; generate again to get takes like it
 python -m nemophones page            # build/review.html
