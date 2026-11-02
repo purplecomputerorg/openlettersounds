@@ -1,42 +1,61 @@
-"""Public picking page for GitHub Pages: each letter's kept clips, then every passing take of its latest round,
-served from docs/."""
+"""Public page for GitHub Pages, served from docs/: the library to play and download (one clip per letter sound,
+plus alternates), and each letter's latest passing takes for visitors to suggest as alternates."""
 import json
 import shutil
+import zipfile
 
 from . import ROOT
-from .check import LIBRARY, META, REPORT, kept_clips
+from .check import LIBRARY, META, REPORT
 from .generate import take_dir
 from .page import ogg
 from .sounds import SOUNDS
 
 OUT = ROOT / "docs"
-AUDIO = OUT / "audio"
+AUDIO = OUT / "audio"  # candidate takes, as small Vorbis files
+CLIPS = OUT / "sounds"  # library WAVs, as shipped
+ZIP = f"nemophones-{LIBRARY.parent.name}-{LIBRARY.name}.zip"
 
 
-def _copy(src, name):
-    shutil.copyfile(ogg(src), AUDIO / name)
-    return f"audio/{name}"
+def _sync(folder, wanted):
+    """Remove files a previous build left that this one no longer serves."""
+    for f in folder.glob("*.*"):
+        if f.name not in wanted:
+            f.unlink()
 
 
 def _letter(s, rows, entry):
-    """kept: the library clip and alternates a person picked; takes: this round's candidates to pick from."""
-    kept = [dict(label="pick" if i == 0 else f"alt {i}", file=_copy(LIBRARY / c["file"], f"{s.letter}-kept{i}.ogg"))
-            for i, c in enumerate(kept_clips(entry))]
-    takes = [dict(n=int(r["take"]) + 1, file=_copy(ROOT / r["finished"], f"{s.letter}-{int(r['take']) + 1:02d}.ogg"))
-             for r in rows if not r["problems"] and not r.get("kept")]
-    return dict(letter=s.letter, ipa=s.ipa, keywords=list(s.keywords), round=take_dir(s).name, kept=kept, takes=takes)
+    clips = [entry, *entry.get("alts", [])] if entry else []
+    library = [dict(label="main" if i == 0 else f"alt {i}", file=f"sounds/{c['file']}") for i, c in enumerate(clips)]
+    candidates = []
+    for r in rows:
+        if not r["problems"] and not r.get("kept"):
+            n = int(r["take"]) + 1
+            shutil.copyfile(ogg(ROOT / r["finished"]), AUDIO / f"{s.letter}-{n:02d}.ogg")
+            candidates.append(dict(n=n, file=f"audio/{s.letter}-{n:02d}.ogg"))
+    return dict(letter=s.letter, ipa=s.ipa, keywords=list(s.keywords), round=take_dir(s).name, library=library,
+                candidates=candidates)
+
+
+def _zip(files):
+    """Every library clip with its metadata and license; fixed timestamps so an unchanged library zips identically."""
+    with zipfile.ZipFile(OUT / ZIP, "w", zipfile.ZIP_DEFLATED) as z:
+        for f in files:
+            z.writestr(zipfile.ZipInfo(f"nemophones/{f.name}", (1980, 1, 1, 0, 0, 0)), f.read_bytes())
 
 
 def build():
     report = json.loads(REPORT.read_text())
     library = {e["letter"]: e for e in json.loads(META.read_text())}
     AUDIO.mkdir(parents=True, exist_ok=True)
-    letters = [_letter(s, report[s.letter], library.get(s.letter, {})) for s in SOUNDS if s.letter in report]
-    keep = {c["file"].split("/")[-1] for e in letters for c in e["kept"] + e["takes"]}
-    for f in AUDIO.glob("*.ogg"):
-        if f.name not in keep:
-            f.unlink()
-    (OUT / "takes.json").write_text(json.dumps(letters, ensure_ascii=False))
+    CLIPS.mkdir(parents=True, exist_ok=True)
+    letters = [_letter(s, report.get(s.letter, []), library.get(s.letter)) for s in SOUNDS]
+    wavs = [LIBRARY / c["file"].split("/")[-1] for e in letters for c in e["library"]]
+    for w in wavs:
+        shutil.copyfile(w, CLIPS / w.name)
+    _sync(CLIPS, {w.name for w in wavs})
+    _sync(AUDIO, {c["file"].split("/")[-1] for e in letters for c in e["candidates"]})
+    _zip([*wavs, META, LIBRARY.parent.parent / "LICENSE"])
+    (OUT / "takes.json").write_text(json.dumps(dict(zip=ZIP, letters=letters), ensure_ascii=False))
     shutil.copyfile(ROOT / "nemophones" / "site.html", OUT / "index.html")
     size = sum(f.stat().st_size for f in OUT.rglob("*") if f.is_file())
-    print(OUT, len(keep), "clips", size // 1024, "KB")
+    print(OUT, len(wavs), "library clips,", sum(len(e["candidates"]) for e in letters), "candidates,", size // 1024, "KB")

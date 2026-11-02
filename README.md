@@ -56,7 +56,7 @@ The system message is the same for every sound. The user message changes with th
 
 `python -m nemophones prompts` prints the system message and all 26 user messages exactly as sent.
 
-**[Listen and pick](https://tavinathanson.github.io/nemophones/)**: every passing take per letter. Star the best ones and send your picks as a GitHub issue.
+**[Listen and download](https://tavinathanson.github.io/nemophones/)**: every clip and alternate, a zip of the whole library, and new takes you can suggest as alternates through a GitHub issue.
 
 ## Run it
 
@@ -69,7 +69,7 @@ python -m nemophones generate [letters] --takes 10
 python -m nemophones check [letters] [--judge] # gate, rank (--judge: audio model re-ranks the top, needs the key), write the best take to sounds/
 python -m nemophones pick < picks.txt # keep picks pasted from the page ("b: take 37" lines): first per letter is the clip, later ones alternates
 python -m nemophones page            # build/review.html
-python -m nemophones site            # docs/: the public picking page (GitHub Pages, main /docs)
+python -m nemophones site            # docs/: the public library page and download zip (GitHub Pages, main /docs)
 ```
 
 Takes are cached by a hash of the model, voice and prompt, so editing a sound's spec starts a fresh set and rerunning is free.

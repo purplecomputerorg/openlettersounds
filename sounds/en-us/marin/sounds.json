@@ -558,7 +558,7 @@
    "wet",
    "wig"
   ],
-  "reviewed": false,
+  "reviewed": true,
   "file": "w.wav",
   "generator": {
    "model": "gpt-audio-1.5",
@@ -607,7 +607,7 @@
    "yak",
    "yum"
   ],
-  "reviewed": false,
+  "reviewed": true,
   "file": "y.wav",
   "generator": {
    "model": "gpt-audio-1.5",
