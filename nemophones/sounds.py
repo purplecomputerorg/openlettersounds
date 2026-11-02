@@ -22,6 +22,8 @@ class Sound:
 def _stop(letter, ipa, keywords, voiced, partner=""):
     say = ipa.strip("/")
     how = f"a clear, crisp {say} with a light release and no 'uh' vowel after it (say '{say}', never '{say}uh')"
+    if not voiced:
+        how += ". It is UNVOICED: a soft, light puff of air, never a hard, spitty or hissy burst"
     if voiced:
         how += f". It is VOICED: your voice buzzes as it releases, like the start of '{keywords[0]}'. It must not sound like '{partner}'"
     return Sound(letter, ipa, STOP, keywords, how, voiced)

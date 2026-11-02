@@ -36,7 +36,7 @@ def _btn(label, path, note, cls=""):
 def _row(s, rows):
     ref_btns = "".join(_btn(REF_LABEL[k], p, "reference") for k, p in refs.paths(s.letter).items())
     passing = [r for r in rows if not r["problems"]]
-    picks = "".join(_btn(f"take {int(r['take']) + 1}", ROOT / r["finished"], f"sim {r['similarity']}", "pick" if i == 0 else "")
+    picks = "".join(_btn(f"take {int(r['take']) + 1}", ROOT / r["finished"], f"judge {r['judge']}" if "judge" in r else f"sim {r['similarity']}", "pick" if i == 0 else "")
                     for i, r in enumerate(passing))
     rejected = "".join(_btn(f"take {int(r['take']) + 1}", take_dir(s) / f"{r['take']}.wav", "; ".join(r["problems"]), "rej")
                        for r in rows if r["problems"])

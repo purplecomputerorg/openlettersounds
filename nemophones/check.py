@@ -3,8 +3,8 @@ and write the best one per sound into the library."""
 import json
 from functools import cache
 
-from . import ROOT, audio, recognize, refs
-from .generate import MODEL, SYSTEM, VOICE, prompt, take_dir
+from . import ROOT, audio, judge, recognize, refs
+from .generate import MODEL, SYSTEM, VOICE, exemplar, prompt, take_dir
 from .sounds import HOLD, SOUNDS, STOP, VOWEL
 
 LIBRARY = ROOT / "sounds" / "en-us" / VOICE
@@ -128,18 +128,20 @@ def publish(sound, rows):
     dst.write_bytes((ROOT / best["finished"]).read_bytes())
     return dict(letter=sound.letter, ipa=sound.ipa, kind=sound.kind, keywords=list(sound.keywords), file=dst.name,
                 reviewed=False, generator=dict(model=MODEL, voice=VOICE, system=SYSTEM, prompt=prompt(sound),
-                                               take=f"{take_dir(sound).name}/{best['take']}"))
+                                               exemplar=str(exemplar(sound).relative_to(ROOT)) if exemplar(sound) else None,
+                                               take=f"{take_dir(sound).name}/{best['take']}"),
+                judge=dict(model=judge.MODEL, wins=best["judge"]) if "judge" in best else None)
 
 
 REPORT = ROOT / "build" / "report.json"
 
 
-def run(sounds):
+def run(sounds, use_judge=False):
     meta_path = LIBRARY / "sounds.json"
     library = {e["letter"]: e for e in json.loads(meta_path.read_text())} if meta_path.exists() else {}
     report = json.loads(REPORT.read_text()) if REPORT.exists() else {}
     for s in sounds:
-        report[s.letter] = check(s)
+        report[s.letter] = judge.rank(s, check(s)) if use_judge else check(s)
         entry = publish(s, report[s.letter])
         passed = sum(not r["problems"] for r in report[s.letter])
         print(f"{s.letter}: {passed}/{len(report[s.letter])} pass" + ("" if entry else "  NO PICK"))
