@@ -9,7 +9,7 @@ from itertools import permutations
 
 from . import ROOT, api, audio, refs
 
-MODEL = "gemini-2.5-pro" if api.env("GEMINI_API_KEY") else "gpt-audio-1.5"
+MODEL = "gemini-pro-latest" if api.env("GEMINI_API_KEY") else "gpt-audio-1.5"
 TOP = 6
 CACHE = ROOT / "build" / "judge"
 
