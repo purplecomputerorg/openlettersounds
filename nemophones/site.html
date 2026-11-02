@@ -89,7 +89,8 @@ function play(file,el){
   const done=()=>el?.classList.remove("playing");
   audio.onended=done;audio.play().catch(done);
 }
-const mine=l=>picks[l.round]||[];
+// stars on takes no longer offered (since kept, or from an old build) are ignored
+const mine=l=>(picks[l.round]||[]).filter(n=>l.candidates.some(c=>c.n===n));
 const find=(l,id)=>id.startsWith("c")?l.candidates.find(c=>`c${c.n}`===id):l.library[+id.slice(1)];
 const name=f=>f.split("/").pop();
 const mainEl=l=>document.querySelector(`#card-${l.letter} [data-id="k0"]`);
