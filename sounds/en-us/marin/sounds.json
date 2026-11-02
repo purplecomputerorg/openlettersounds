@@ -16,11 +16,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter A: produce the short A vowel /æ/, as in 'apple', 'cat', 'hat': a short, steady, fully voiced vowel with a pure clear tone, never breathy, about a third of a second. NOT 'ah' as in 'father', or 'ay' as in 'cake'.",
    "exemplar": null,
-   "take": "a-92e0f0e8/16"
+   "take": "a-92e0f0e8/01"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 9
+   "model": "gemini-pro-latest",
+   "wins": 7
   }
  },
  {
@@ -40,11 +40,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter B: produce the /b/ sound heard at the start of 'ball', 'bat', 'bed': a clear, crisp b with a light release and no 'uh' vowel after it (say 'b', never 'buh'). It is VOICED: your voice buzzes as it releases, like the start of 'ball'. It must not sound like 'p'.",
    "exemplar": "exemplars/marin/b.wav",
-   "take": "b-2931f5d6/12"
+   "take": "b-2931f5d6/04"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 4
+   "model": "gemini-pro-latest",
+   "wins": 3
   }
  },
  {
@@ -64,11 +64,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter C: produce the /k/ sound heard at the start of 'cat', 'cup', 'cot': a clear, crisp k with a light release and no 'uh' vowel after it (say 'k', never 'kuh'). It is UNVOICED: a soft, light puff of air, never a hard, spitty or hissy burst.",
    "exemplar": null,
-   "take": "c-568ae0b7/13"
+   "take": "c-568ae0b7/16"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 5
+   "model": "gemini-pro-latest",
+   "wins": 6
   }
  },
  {
@@ -88,11 +88,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter D: produce the /d/ sound heard at the start of 'dog', 'dig', 'dad': a clear, crisp d with a light release and no 'uh' vowel after it (say 'd', never 'duh'). It is VOICED: your voice buzzes as it releases, like the start of 'dog'. It must not sound like 't'.",
    "exemplar": null,
-   "take": "d-1ecaeea6/21"
+   "take": "d-1ecaeea6/09"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 6
+   "model": "gemini-pro-latest",
+   "wins": 7
   }
  },
  {
@@ -112,10 +112,10 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter E: produce the short E vowel /ɛ/, as in 'egg', 'bed', 'pet': a short, steady, fully voiced vowel with a pure clear tone, never breathy, about a third of a second. NOT 'ee' as in 'see'.",
    "exemplar": null,
-   "take": "e-4a76a52d/15"
+   "take": "e-4a76a52d/04"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
+   "model": "gemini-pro-latest",
    "wins": 7
   }
  },
@@ -136,11 +136,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter F: produce the /f/ sound heard at the start of 'fish', 'fan', 'fun': top teeth on the lower lip, a soft unvoiced 'fff', held steadily for about half a second, no vowel before or after it.",
    "exemplar": null,
-   "take": "f-12ed5ca4/05"
+   "take": "f-12ed5ca4/10"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 7
+   "model": "gemini-pro-latest",
+   "wins": 9
   }
  },
  {
@@ -160,11 +160,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter G: produce the /ɡ/ sound heard at the start of 'goat', 'gum', 'gap': a clear, crisp ɡ with a light release and no 'uh' vowel after it (say 'ɡ', never 'ɡuh'). It is VOICED: your voice buzzes as it releases, like the start of 'goat'. It must not sound like 'k'.",
    "exemplar": null,
-   "take": "g-cd2ccd16/22"
+   "take": "g-cd2ccd16/34"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 1
+   "model": "gemini-pro-latest",
+   "wins": 2
   }
  },
  {
@@ -184,11 +184,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter H: produce the /h/ sound heard at the start of 'hat', 'hop', 'hen': one short, gentle, unvoiced breathy puff, about a quarter of a second, no vowel after it.",
    "exemplar": null,
-   "take": "h-0edb37f4/04"
+   "take": "h-0edb37f4/01"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 8
+   "model": "gemini-pro-latest",
+   "wins": 7
   }
  },
  {
@@ -208,10 +208,10 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter I: produce the short I vowel /ɪ/, as in 'itch', 'sit', 'pig': a short, steady, fully voiced vowel with a pure clear tone, never breathy, about a third of a second. NOT 'eye', or 'ee' as in 'see'.",
    "exemplar": null,
-   "take": "i-14f2deca/17"
+   "take": "i-14f2deca/15"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
+   "model": "gemini-pro-latest",
    "wins": 8
   }
  },
@@ -232,10 +232,10 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter J: produce the /dʒ/ sound heard at the start of 'jam', 'jet', 'jug': a clear, crisp dʒ with a light release and no 'uh' vowel after it (say 'dʒ', never 'dʒuh'). It is VOICED: your voice buzzes as it releases, like the start of 'jam'. It must not sound like 'ch'.",
    "exemplar": null,
-   "take": "j-5932396c/02"
+   "take": "j-5932396c/33"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
+   "model": "gemini-pro-latest",
    "wins": 2
   }
  },
@@ -256,11 +256,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter K: produce the /k/ sound heard at the start of 'kite', 'kid', 'kit': a clear, crisp k with a light release and no 'uh' vowel after it (say 'k', never 'kuh'). It is UNVOICED: a soft, light puff of air, never a hard, spitty or hissy burst.",
    "exemplar": null,
-   "take": "k-ebf5311e/02"
+   "take": "k-ebf5311e/09"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 5
+   "model": "gemini-pro-latest",
+   "wins": 4
   }
  },
  {
@@ -280,11 +280,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter L: produce the /l/ sound heard at the start of 'lip', 'leg', 'lap': mouth open and lips apart, tongue tip pressed on the ridge just behind the top teeth, voice flowing around the sides of the tongue: a bright, clear 'lll', never hummed through the nose, held steadily for about two-thirds of a second, no vowel before or after it. NOT 'mmm' or 'nnn'.",
    "exemplar": null,
-   "take": "l-094c7cd8/18"
+   "take": "l-094c7cd8/05"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 8
+   "model": "gemini-pro-latest",
+   "wins": 7
   }
  },
  {
@@ -304,10 +304,10 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter M: produce the /m/ sound heard at the start of 'moon', 'map', 'mug': lips closed, humming 'mmm', held steadily for about two-thirds of a second, no vowel before or after it. NOT 'nnn'.",
    "exemplar": null,
-   "take": "m-4c920470/18"
+   "take": "m-4c920470/04"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
+   "model": "gemini-pro-latest",
    "wins": 8
   }
  },
@@ -328,11 +328,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter N: produce the /n/ sound heard at the start of 'nest', 'nap', 'nut': lips apart, tongue tip on the ridge behind the top teeth, humming 'nnn' through the nose, held steadily for about two-thirds of a second, no vowel before or after it. NOT 'mmm'.",
    "exemplar": null,
-   "take": "n-335b4c4c/13"
+   "take": "n-335b4c4c/08"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 7
+   "model": "gemini-pro-latest",
+   "wins": 8
   }
  },
  {
@@ -352,11 +352,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter O: produce the short O vowel /ɑ/, as in 'octopus', 'hot', 'pot': a short, steady, fully voiced vowel with a pure clear tone, never breathy, about a third of a second. NOT 'oh' as in 'go' (American short O, like 'ah').",
    "exemplar": null,
-   "take": "o-6b746d5f/07"
+   "take": "o-6b746d5f/05"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 8
+   "model": "gemini-pro-latest",
+   "wins": 7
   }
  },
  {
@@ -379,7 +379,7 @@
    "take": "p-b5df2585/01"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
+   "model": "gemini-pro-latest",
    "wins": 4
   }
  },
@@ -400,11 +400,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter Q: produce the /kw/ sound heard at the start of 'queen', 'quick', 'quack': a crisp k gliding straight into w, stopping the instant the lips open, before any vowel, about a quarter of a second.",
    "exemplar": null,
-   "take": "q-556652e2/12"
+   "take": "q-556652e2/02"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 7
+   "model": "gemini-pro-latest",
+   "wins": 8
   }
  },
  {
@@ -424,10 +424,10 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter R: produce the /ɹ/ sound heard at the start of 'red', 'run', 'rug': American 'rrr', tongue pulled back, not rolled, held steadily for about two-thirds of a second, no vowel before or after it.",
    "exemplar": null,
-   "take": "r-b6f6455c/01"
+   "take": "r-b6f6455c/22"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
+   "model": "gemini-pro-latest",
    "wins": 3
   }
  },
@@ -448,10 +448,10 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter S: produce the /s/ sound heard at the start of 'sun', 'sit', 'sock': a clean, sharp, high-pitched snake hiss 'sss' made with the tongue just behind the top teeth, unvoiced, held steadily for about half a second, no vowel before or after it. NOT breathy air, static or a low rumble.",
    "exemplar": null,
-   "take": "s-1a322749/12"
+   "take": "s-1a322749/02"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
+   "model": "gemini-pro-latest",
    "wins": 7
   }
  },
@@ -472,11 +472,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter T: produce the /t/ sound heard at the start of 'top', 'ten', 'tub': a clear, crisp t with a light release and no 'uh' vowel after it (say 't', never 'tuh'). It is UNVOICED: a soft, light puff of air, never a hard, spitty or hissy burst.",
    "exemplar": null,
-   "take": "t-e05628a0/10"
+   "take": "t-e05628a0/19"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 6
+   "model": "gemini-pro-latest",
+   "wins": 8
   }
  },
  {
@@ -496,11 +496,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter U: produce the short U vowel /ʌ/, as in 'up', 'cup', 'bus': a short, steady, fully voiced vowel with a pure clear tone, never breathy, about a third of a second. NOT 'oo' as in 'moon', or 'you'.",
    "exemplar": null,
-   "take": "u-89d079e9/12"
+   "take": "u-89d079e9/04"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 6
+   "model": "gemini-pro-latest",
+   "wins": 8
   }
  },
  {
@@ -520,10 +520,10 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter V: produce the /v/ sound heard at the start of 'van', 'vet', 'vest': top teeth on the lower lip, a voiced buzz 'vvv', held steadily for about two-thirds of a second, no vowel before or after it.",
    "exemplar": null,
-   "take": "v-c9495ef1/16"
+   "take": "v-c9495ef1/11"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
+   "model": "gemini-pro-latest",
    "wins": 8
   }
  },
@@ -544,11 +544,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter W: produce the /w/ sound heard at the start of 'web', 'wet', 'wig': tightly rounded lips gliding open, stopping the instant the lips open, before your mouth settles into any vowel: 'wet' with the 'et' removed, about a fifth of a second. NOT 'wuh'.",
    "exemplar": null,
-   "take": "w-85abbd8f/19"
+   "take": "w-85abbd8f/14"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 7
+   "model": "gemini-pro-latest",
+   "wins": 10
   }
  },
  {
@@ -568,11 +568,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter X: produce the /ks/ sound heard at the end of 'fox', 'box', 'six': a crisp k straight into a short clean hiss, as at the END of the word, about a third of a second. NOT the letter name 'ecks'.",
    "exemplar": null,
-   "take": "x-a52e48e3/10"
+   "take": "x-a52e48e3/03"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 8
+   "model": "gemini-pro-latest",
+   "wins": 6
   }
  },
  {
@@ -592,11 +592,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter Y: produce the /j/ sound heard at the start of 'yes', 'yak', 'yum': tongue high and forward, a short 'yy' glide that stops the instant it is made, before your mouth settles into any vowel: 'yes' with the 'es' removed, about a fifth of a second. NOT 'yuh'.",
    "exemplar": null,
-   "take": "y-599cb95f/08"
+   "take": "y-599cb95f/03"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 10
+   "model": "gemini-pro-latest",
+   "wins": 6
   }
  },
  {
@@ -616,11 +616,11 @@
    "system": "You are an expert early-literacy phonics teacher recording audio for a children's reading app. You model 'pure sounds' the way Jolly Phonics, UFLI and Letters and Sounds teach them: stop sounds are clipped with no added schwa, continuous sounds are held, vowels are short. When asked for a sound, your entire spoken reply is ONLY that one sound, said once, warm and clear, at normal speaking volume. Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper and never sound breathy. Never say the letter name, the example word, or any other words.",
    "prompt": "Letter Z: produce the /z/ sound heard at the start of 'zoo', 'zip', 'zap': a voiced buzzing 'zzz' like a bee, one steady buzz, held steadily for about two-thirds of a second, no vowel before or after it. NOT 'sss', or a wobbling buzz.",
    "exemplar": null,
-   "take": "z-6430cef3/01"
+   "take": "z-6430cef3/13"
   },
   "judge": {
-   "model": "gpt-audio-1.5",
-   "wins": 4
+   "model": "gemini-pro-latest",
+   "wins": 3
   }
  }
 ]
