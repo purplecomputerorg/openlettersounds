@@ -4,7 +4,7 @@ import json
 from functools import cache
 
 from . import ROOT, audio, judge, recognize, refs
-from .generate import MODEL, SYSTEM, VOICE, exemplar, prompt, take_dir
+from .generate import MODEL, SYSTEM, VOICE, prompt, take_dir
 from .sounds import HOLD, SOUNDS, STOP, VOWEL
 
 LIBRARY = ROOT / "sounds" / "en-us" / VOICE
@@ -92,7 +92,9 @@ def problems(s, m, heard):
     else:
         if m["loud_ms"] > 600 or m["sound_ms"] > 700:
             out.append("noise or too long")
-        if s.voiced and m["voiced_ms"] > 180:
+        if s.voiced and m["voiced_ms"] < 100:
+            out.append("whispered, not voiced")
+        if s.voiced and m["voiced_ms"] > 320:
             out.append("vowel after the glide")
     return out
 
@@ -118,39 +120,86 @@ def check(sound):
     return rows
 
 
-def publish(sound, rows):
-    """Best passing take becomes the library clip, with everything needed to reproduce it."""
-    best = next((r for r in rows if not r["problems"]), None)
-    if best is None:
-        return None
-    dst = LIBRARY / f"{sound.letter}.wav"
+def _clip(sound, row, name):
+    """Copy a take's finished clip into the library as name; return its provenance."""
+    dst = LIBRARY / name
     dst.parent.mkdir(parents=True, exist_ok=True)
-    dst.write_bytes((ROOT / best["finished"]).read_bytes())
-    return dict(letter=sound.letter, ipa=sound.ipa, kind=sound.kind, keywords=list(sound.keywords), file=dst.name,
-                reviewed=False, generator=dict(model=MODEL, voice=VOICE, system=SYSTEM, prompt=prompt(sound),
-                                               exemplar=str(exemplar(sound).relative_to(ROOT)) if exemplar(sound) else None,
-                                               take=f"{take_dir(sound).name}/{best['take']}"),
-                judge=dict(model=judge.MODEL, wins=best["judge"]) if "judge" in best else None)
+    dst.write_bytes((ROOT / row["finished"]).read_bytes())
+    return dict(file=name, generator=dict(model=MODEL, voice=VOICE, system=SYSTEM, prompt=prompt(sound),
+                                          take=f"{take_dir(sound).name}/{row['take']}"),
+                judge=dict(model=judge.MODEL, wins=row["judge"]) if "judge" in row else None)
+
+
+def publish(sound, row, entry=None, reviewed=False):
+    """Make row the library clip, keeping any alternates already picked."""
+    return dict(letter=sound.letter, ipa=sound.ipa, kind=sound.kind, keywords=list(sound.keywords), reviewed=reviewed,
+                **_clip(sound, row, f"{sound.letter}.wav"), alts=(entry or {}).get("alts", []))
 
 
 REPORT = ROOT / "build" / "report.json"
+META = LIBRARY / "sounds.json"
+
+
+def _load(path):
+    return json.loads(path.read_text()) if path.exists() else None
+
+
+def _save_library(library):
+    META.parent.mkdir(parents=True, exist_ok=True)
+    META.write_text(json.dumps(sorted(library.values(), key=lambda e: e["letter"]), indent=1, ensure_ascii=False))
 
 
 def run(sounds, use_judge=False):
-    meta_path = LIBRARY / "sounds.json"
-    library = {e["letter"]: e for e in json.loads(meta_path.read_text())} if meta_path.exists() else {}
-    report = json.loads(REPORT.read_text()) if REPORT.exists() else {}
+    """Check every take; a sound nobody has picked yet gets the best passing take as its library clip."""
+    library = {e["letter"]: e for e in _load(META) or []}
+    report = _load(REPORT) or {}
     if use_judge:
         print(f"judge: {judge.MODEL}" + ("" if judge.MODEL.startswith("gemini") else " (set GEMINI_API_KEY in .env to use Gemini)"))
     for s in sounds:
-        report[s.letter] = judge.rank(s, check(s)) if use_judge else check(s)
-        entry = publish(s, report[s.letter])
-        passed = sum(not r["problems"] for r in report[s.letter])
-        print(f"{s.letter}: {passed}/{len(report[s.letter])} pass" + ("" if entry else "  NO PICK"))
-        if entry:
-            library[s.letter] = entry
-    meta_path.parent.mkdir(parents=True, exist_ok=True)
-    meta_path.write_text(json.dumps(sorted(library.values(), key=lambda e: e["letter"]), indent=1, ensure_ascii=False))
+        rows = check(s)
+        for r in rows:
+            r["kept"] = f"{take_dir(s).name}/{r['take']}" in kept_takes(library.get(s.letter, {}))
+        rows = report[s.letter] = judge.rank(s, rows) if use_judge else rows
+        best = next((r for r in rows if not r["problems"]), None)
+        kept = library.get(s.letter, {}).get("reviewed")
+        print(f"{s.letter}: {sum(not r['problems'] for r in rows)}/{len(rows)} pass"
+              + ("  (keeps your pick)" if kept else "" if best else "  NO PICK"))
+        if best and not kept:
+            library[s.letter] = publish(s, best, library.get(s.letter))
+    _save_library(library)
     REPORT.parent.mkdir(exist_ok=True)
     REPORT.write_text(json.dumps(report, indent=1, ensure_ascii=False))
     return report
+
+
+def kept_clips(entry):
+    """The library clip and alternates a person picked, newest last."""
+    return [entry, *entry.get("alts", [])] if entry.get("reviewed") else []
+
+
+def kept_takes(entry):
+    return {c["generator"]["take"] for c in kept_clips(entry)}
+
+
+def pick(picks):
+    """Keep a person's picks, [(letter, take number as shown on the pages)]. A letter's first pick becomes its
+    library clip, never replaced by later runs, and the exemplar new takes are generated to sound like; every later
+    pick is kept as one more alternate beside it."""
+    from .generate import like
+    from .sounds import BY_LETTER
+    library = {e["letter"]: e for e in _load(META) or []}
+    report = _load(REPORT)
+    for letter, n in picks:
+        s, entry = BY_LETTER[letter], library.get(letter, {})
+        row = next(r for r in report[letter] if int(r["take"]) + 1 == n and not r["problems"])
+        take = f"{take_dir(s).name}/{row['take']}"
+        if take in kept_takes(entry):
+            continue
+        if entry.get("reviewed"):
+            entry["alts"].append(_clip(s, row, f"{letter}-alt{len(entry['alts']) + 1}.wav"))
+            print(f"{letter}: kept take {n} as alternate {len(entry['alts'])}")
+        else:
+            library[letter] = publish(s, row, entry, reviewed=True)
+            like(s, ROOT / row["finished"])
+            print(f"{letter}: kept take {n} as the library clip")
+    _save_library(library)

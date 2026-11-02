@@ -2,15 +2,15 @@
 
 Open phonics sounds: one clean clip per letter sound, free for any use.
 
-`sounds/en-us/marin/` has the 26 letter sounds of US English phonics (short vowels, hard C and G, X as /ks/, Q as /kw/), with `sounds.json` giving each clip's IPA, example words, and the exact prompt and take that produced it. Clips are mono 16-bit WAV, trimmed and level-matched. Entries with `"reviewed": false` passed the automatic checks but have not yet had a final listen.
+`sounds/en-us/marin/` has the 26 letter sounds of US English phonics (short vowels, hard C and G, X as /ks/, Q as /kw/), with `sounds.json` giving each clip's IPA, example words, and the exact prompt and take that produced it. Clips are mono 16-bit WAV, trimmed and level-matched. Entries with `"reviewed": true` were picked by a person; `"reviewed": false` passed the automatic checks but have not yet had a final listen. Each entry's `alts` lists alternate takes of the same sound (`<letter>-alt1.wav` and so on), also picked by a person, for apps that want variety.
 
 ## How the sounds are made
 
-1. **Generate.** OpenAI's `gpt-audio-1.5` (voice `marin`) is prompted as a phonics teacher, from a text spec per sound in `nemophones/sounds.py`: example words, how it is made, what it is not ("short A as in apple, not 'ah'"). Each sound gets 20 to 40 takes. Once a person has picked a take they like, `like` makes it that sound's exemplar (`exemplars/marin/`), and later takes are generated with it attached as audio and asked to sound like it. Only our own takes are ever given to the generator; third-party reference audio never is.
+1. **Generate.** OpenAI's `gpt-audio-1.5` (voice `marin`) is prompted as a phonics teacher, from a text spec per sound in `nemophones/sounds.py`: example words, how it is made, what it is not ("short A as in apple, not 'ah'"). Each sound gets 20 to 40 takes. No audio is given to the model. Attaching a take a person had picked, and asking for more like it, was tried and made later takes shorter, noisier and buzzier for almost every sound, so picks guide the judge instead (below).
 2. **Check.** Every take is measured and rejected if a listener would object: a breath or pause before the sound, noise instead of a crisp release, a voiced stop that came out unvoiced (B sounding like P), an added "uh", a hold that wobbles, static in place of a hiss. A wav2vec2 phoneme recognizer reports what it hears.
-3. **Rank.** Takes the recognizer hears cleanly come first, then by how close they are to reference recordings of the same sound, compared frame by frame on the recognizer's output. That closeness separates held sounds well but barely separates clipped stops, so with `--judge` a second listener re-ranks the top six: Gemini (its latest Pro model) when `GEMINI_API_KEY` is set, else `gpt-audio-1.5`, hears the teachers' reference recordings, then two of our takes, and says which one a child should hear (clearly the sound, natural and warm, not harsh or spitty). Every pair is played in both orders, takes are re-ranked by wins, and every verdict with its reason is cached under `build/judge/`.
+3. **Rank.** Takes the recognizer hears cleanly come first, then by how close they are to reference recordings of the same sound, compared frame by frame on the recognizer's output. That closeness separates held sounds well but barely separates clipped stops, so with `--judge` a second listener re-ranks the top six: Gemini (its latest Pro model) when `GEMINI_API_KEY` is set, else `gpt-audio-1.5`, hears the teachers' reference recordings, then two of our takes, and says which one a child should hear (clearly the sound, natural and warm, not harsh or spitty). Once a person has picked a take for a sound (`exemplars/marin/`), the judge hears it too, as the sound and feel they want. Every pair is played in both orders, takes are re-ranked by wins, and every verdict with its reason is cached under `build/judge/`.
 4. **Finish.** The best take is trimmed to the sound, long holds are capped with a fade, and every clip is set to the same loudness.
-5. **Listen.** `build/review.html` shows references, passing takes and rejected takes with reasons, for a final human pass.
+5. **Listen and pick.** `build/review.html` shows references, passing takes and rejected takes with reasons; the public page shows each letter's kept clips, then the new takes to star. `pick` takes the starred list: a letter's first pick becomes its library clip, which later runs never replace, and every later pick becomes an alternate.
 
 ### Why an audio language model, not text to speech
 
@@ -52,7 +52,7 @@ The system message is the same for every sound. The user message changes with th
 | Stop | B C D G H J K P T | clipped, no "uh"; voiced ones name their partner, unvoiced ones ask for a soft puff, not a spitty burst (H is one gentle puff) | the B prompt above |
 | Hold | F L M N R S V Z | held for about two thirds of a second (F and S half a second), no vowel around it | Letter S: produce the /s/ sound heard at the start of 'sun', 'sit', 'sock': a clean, sharp, high-pitched snake hiss 'sss' made with the tongue just behind the top teeth, unvoiced, held steadily for about half a second, no vowel before or after it. NOT breathy air, static or a low rumble. |
 | Vowel | A E I O U | short, steady, fully voiced, about a third of a second | Letter A: produce the short A vowel /æ/, as in 'apple', 'cat', 'hat': a short, steady, fully voiced vowel with a pure clear tone, never breathy, about a third of a second. NOT 'ah' as in 'father', or 'ay' as in 'cake'. |
-| Glide | Q W X Y | the sound alone, stopped before any vowel (X is the /ks/ at the end of 'fox') | Letter W: produce the /w/ sound heard at the start of 'web', 'wet', 'wig': tightly rounded lips gliding open, stopping the instant the lips open, before your mouth settles into any vowel: 'wet' with the 'et' removed, about a fifth of a second. NOT 'wuh'. |
+| Glide | Q W X Y | the sound alone, stopped before any vowel (X is the /ks/ at the end of 'fox'); W and Y fully voiced, with only the faintest hint of a vowel | Letter W: produce the /w/ sound heard at the start of 'web', 'wet', 'wig': lips tightly rounded as for 'oo', voice on from the very start, gliding open into only the faintest clipped hint of a vowel, the way a teacher says it at the start of 'wet', about a quarter of a second. Fully voiced and clearly audible, never whispered or breathy. NOT a long 'wuh', or the letter name 'double-u'. |
 
 `python -m nemophones prompts` prints the system message and all 26 user messages exactly as sent.
 
@@ -67,7 +67,7 @@ python -m nemophones prompts [letters] # print the exact messages sent to the mo
 cp .env.example .env                 # then put your OpenAI key in .env
 python -m nemophones generate [letters] --takes 10
 python -m nemophones check [letters] [--judge] # gate, rank (--judge: audio model re-ranks the top, needs the key), write the best take to sounds/
-python -m nemophones like b 37       # make take 37 of B its exemplar; generate again to get takes like it
+python -m nemophones pick < picks.txt # keep picks pasted from the page ("b: take 37" lines): first per letter is the clip, later ones alternates
 python -m nemophones page            # build/review.html
 python -m nemophones site            # docs/: the public picking page (GitHub Pages, main /docs)
 ```

@@ -1,5 +1,6 @@
-"""Takes from OpenAI's audio model, prompted from the text spec, plus a past take of our own a person liked once
-one is set (exemplars/). Third-party reference audio never goes in."""
+"""Takes from OpenAI's audio model, prompted from the text spec only. Audio never goes in: attaching a take a person
+liked made later takes shorter, noisier and buzzier for almost every sound, so picked takes (exemplars/) guide
+only the judge."""
 import base64
 import hashlib
 import json
@@ -19,8 +20,6 @@ SYSTEM = ("You are an expert early-literacy phonics teacher recording audio for 
           "Begin the sound instantly, with no breath, click or pause before it, and stop cleanly with no breath after. "
           "It must sound like a clean studio recording: no static, rumble, hiss or background noise. Never whisper "
           "and never sound breathy. Never say the letter name, the example word, or any other words.")
-LIKE = ("The recording attached is a take of this exact sound that a listener picked as the best so far. Make a fresh "
-        "take that sounds like it: the same sound, length, softness and warmth.")
 
 
 def prompt(s):
@@ -37,17 +36,10 @@ def exemplar(s):
     return p if p.exists() else None
 
 
-def messages(s):
-    ex = exemplar(s)
-    user = [{"type": "text", "text": f"{prompt(s)} {LIKE}"}, api.audio_part(ex)] if ex else prompt(s)
-    return [{"role": "system", "content": SYSTEM}, {"role": "user", "content": user}]
-
-
 def take_dir(s):
-    """Takes are keyed by everything that shapes them, so editing a prompt or exemplar starts a fresh set."""
-    ex = exemplar(s)
-    key = [MODEL, VOICE, SYSTEM, prompt(s)] + ([LIKE, hashlib.sha1(ex.read_bytes()).hexdigest()] if ex else [])
-    return TAKES_DIR / VOICE / f"{s.letter}-{hashlib.sha1(json.dumps(key).encode()).hexdigest()[:8]}"
+    """Takes are keyed by everything that shapes them, so editing a prompt starts a fresh set."""
+    key = hashlib.sha1(json.dumps([MODEL, VOICE, SYSTEM, prompt(s)]).encode()).hexdigest()[:8]
+    return TAKES_DIR / VOICE / f"{s.letter}-{key}"
 
 
 def _one(job):
@@ -56,7 +48,7 @@ def _one(job):
     if dst.exists():
         return
     body = {"model": MODEL, "modalities": ["text", "audio"], "audio": {"voice": VOICE, "format": "wav"},
-            "messages": messages(s)}
+            "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt(s)}]}
     audio = api.chat(body)["audio"]
     dst.parent.mkdir(parents=True, exist_ok=True)
     dst.write_bytes(base64.b64decode(audio["data"]))
@@ -65,14 +57,14 @@ def _one(job):
 
 def generate(sounds, takes):
     api.pmap(_one, [(s, n) for s in sounds for n in range(takes)], name=lambda j: f"{j[0].letter} take {j[1]}")
-    (TAKES_DIR / VOICE).mkdir(parents=True, exist_ok=True)
-    (TAKES_DIR / VOICE / "prompts.json").write_text(json.dumps(
-        {s.letter: {"dir": take_dir(s).name, "system": SYSTEM, "prompt": prompt(s),
-                    "exemplar": str(exemplar(s).relative_to(ROOT)) if exemplar(s) else None} for s in sounds},
-        indent=1, ensure_ascii=False))
+    index = TAKES_DIR / VOICE / "prompts.json"
+    prompts = json.loads(index.read_text()) if index.exists() else {}
+    prompts.update({s.letter: {"dir": take_dir(s).name, "system": SYSTEM, "prompt": prompt(s)} for s in sounds})
+    index.parent.mkdir(parents=True, exist_ok=True)
+    index.write_text(json.dumps(dict(sorted(prompts.items())), indent=1, ensure_ascii=False))
 
 
 def like(s, finished):
-    """Make a finished take this sound's exemplar: later takes are generated to sound like it."""
+    """Make a finished take this sound's exemplar, the one the judge hears as what a person wants."""
     EXEMPLARS.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(finished, EXEMPLARS / f"{s.letter}.wav")

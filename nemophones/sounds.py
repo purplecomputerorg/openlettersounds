@@ -39,6 +39,12 @@ def _vowel(letter, ipa, keywords, not_like):
                  "about a third of a second", True, not_like)
 
 
+def _voiced_glide(start, word):
+    return (f"{start}, voice on from the very start, gliding open into only the faintest clipped hint of a vowel, the "
+            f"way a teacher says it at the start of '{word}', about a quarter of a second. Fully voiced and clearly "
+            "audible, never whispered or breathy")
+
+
 def _glide(letter, ipa, keywords, how, voiced, not_like=""):
     return Sound(letter, ipa, GLIDE, keywords, how, voiced, not_like)
 
@@ -73,15 +79,13 @@ SOUNDS = (
     _stop("t", "/t/", ("top", "ten", "tub"), False),
     _vowel("u", "/ʌ/", ("up", "cup", "bus"), "'oo' as in 'moon', or 'you'"),
     _hold("v", "/v/", ("van", "vet", "vest"), True, "top teeth on the lower lip, a voiced buzz 'vvv'"),
-    _glide("w", "/w/", ("web", "wet", "wig"),
-           "tightly rounded lips gliding open, stopping the instant the lips open, before your mouth settles into any "
-           "vowel: 'wet' with the 'et' removed, about a fifth of a second", True, "'wuh'"),
+    _glide("w", "/w/", ("web", "wet", "wig"), _voiced_glide("lips tightly rounded as for 'oo'", "wet"), True,
+           "a long 'wuh', or the letter name 'double-u'"),
     _glide("x", "/ks/", ("fox", "box", "six"),
            "a crisp k straight into a short clean hiss, as at the END of the word, about a third of a second", False,
            "the letter name 'ecks'"),
-    _glide("y", "/j/", ("yes", "yak", "yum"),
-           "tongue high and forward, a short 'yy' glide that stops the instant it is made, before your mouth settles "
-           "into any vowel: 'yes' with the 'es' removed, about a fifth of a second", True, "'yuh'"),
+    _glide("y", "/j/", ("yes", "yak", "yum"), _voiced_glide("tongue high and forward as for 'ee'", "yes"), True,
+           "a long 'yuh', or the letter name 'why'"),
     _hold("z", "/z/", ("zoo", "zip", "zap"), True, "a voiced buzzing 'zzz' like a bee, one steady buzz",
           not_like="'sss', or a wobbling buzz"),
 )

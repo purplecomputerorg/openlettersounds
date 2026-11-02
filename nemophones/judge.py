@@ -8,6 +8,7 @@ from functools import cache
 from itertools import permutations
 
 from . import ROOT, api, audio, refs
+from .generate import exemplar
 
 MODEL = "gemini-pro-latest" if api.env("GEMINI_API_KEY") else "gpt-audio-1.5"
 TOP = 6
@@ -21,8 +22,8 @@ def _ask_text(s):
     words = ", ".join(f"'{w}'" for w in s.keywords)
     return (f"Which candidate, A or B, should a child hear as the model of the {s.ipa} sound in {words}? In order of "
             f"importance: it is clearly {s.ipa} and nothing else (no 'uh' or other vowel added, not a different sound); "
-            "it sounds natural and warm, like the teachers (their accents may differ, judge the sound); it is not "
-            "harsh, spitty, clicky, hissy, distorted, or noisy; it is not breathy or whispered. "
+            "it sounds natural and warm, like the teachers and the listener's pick, if given (accents may differ, judge "
+            "the sound); it is not harsh, spitty, clicky, hissy, distorted, or noisy; it is not breathy or whispered. "
             'Reply as {"better": "A" or "B", "why": "<one short sentence>"}.')
 
 
@@ -43,12 +44,14 @@ def _ref_wavs(letter):
 def _verdict(job):
     """'A' or 'B' for one ordered pair, from the cache when this exact question was asked before."""
     s, a, b = job
-    clips = [*_ref_wavs(s.letter), a, b]
+    ex = exemplar(s)
+    clips = [*_ref_wavs(s.letter), *([ex] if ex else []), a, b]
     key = hashlib.sha1(json.dumps([MODEL, SYSTEM, _ask_text(s)] + [hashlib.sha1(p.read_bytes()).hexdigest() for p in clips])
                        .encode()).hexdigest()[:16]
     hit = CACHE / f"{s.letter}-{key}.json"
     if not hit.exists():
-        reply = api.listen(MODEL, SYSTEM, ["Teachers saying the target sound:", *clips[:-2],
+        liked = ["The take a listener already picked as the best, for the sound and feel they want:", ex] if ex else []
+        reply = api.listen(MODEL, SYSTEM, ["Teachers saying the target sound:", *_ref_wavs(s.letter), *liked,
                                            "Candidate A:", a, "Candidate B:", b, _ask_text(s)])
         text = reply.strip().removeprefix("```json").strip("`\n ")
         verdict = json.loads(text)
@@ -60,8 +63,9 @@ def _verdict(job):
 
 
 def rank(s, rows):
-    """Re-rank the top passing takes by how many head-to-heads they win; the rest keep their order after them."""
-    top = [r for r in rows if not r["problems"]][:TOP]
+    """Re-rank the top passing takes not already kept by how many head-to-heads they win; the rest keep their order
+    after them."""
+    top = [r for r in rows if not r["problems"] and not r.get("kept")][:TOP]
     pairs = list(permutations(top, 2))
     verdicts = api.pmap(_verdict, [(s, ROOT / a["finished"], ROOT / b["finished"]) for a, b in pairs],
                         name=lambda j: f"{s.letter} judge {j[1].stem} vs {j[2].stem}")

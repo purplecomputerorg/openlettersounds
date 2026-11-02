@@ -31,7 +31,7 @@ kbd{font-family:var(--mono);font-size:.85em;border:1px solid var(--line);border-
 .take .play{display:grid;justify-items:start;line-height:1.2}
 .take .play small{font-size:.7rem;color:var(--muted)}
 .take .star{border-left:1px solid var(--line);font-size:1.1rem;color:var(--muted);padding:8px 10px}
-.take.mine{border-color:var(--star)}.take.mine .star{color:var(--star)}
+.take.kept{border-style:dashed}.take.mine{border-color:var(--star)}.take.mine .star{color:var(--star)}
 .take.playing{background:var(--accent)}.take.playing .play,.take.playing .play small{color:var(--bg)}
 button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .none{color:var(--muted);font-style:italic}
@@ -46,7 +46,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 <body>
 <main>
 <header><h1>Nemophones</h1><a href="https://github.com/tavinathanson/nemophones">Code, sounds and how they are made on GitHub</a></header>
-<p>Free phonics sounds, one clip per letter sound (CC0). Each letter shows every generated take that passed the automatic checks, best guess first; <b>now</b> marks the one in the library today. Tap a take to hear it, tap ★ to pick it. Your picks stay in this browser until you send them.</p>
+<p>Free phonics sounds, one clip per letter sound plus alternates (CC0). Each letter starts with the clips already kept (<b>pick</b> and <b>alt</b>), then every new take that passed the automatic checks, best guess first. Tap a take to hear it, tap ★ to pick it; star as many as you like. Your picks stay in this browser until you send them.</p>
 <p>On a keyboard, press a letter to jump there and hear your pick.</p>
 <div id="cards"></div>
 </main>
@@ -57,7 +57,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 </div></div>
 <script>
 const REPO="https://github.com/tavinathanson/nemophones";
-const KEY="nemophones-picks";
+const KEY="nemophones-picks-by-round";
 let picks={};
 try{picks=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(picks))}catch(e){}};
@@ -69,45 +69,49 @@ function play(file,el,next){
   const done=()=>{el?.classList.remove("playing");if(next)setTimeout(next,450)};
   audio.onended=done;audio.play().catch(done);
 }
-const chosen=l=>l.takes.find(t=>t.n===picks[l.letter])||l.takes.find(t=>t.pick)||l.takes[0];
-const takeEl=(l,t)=>document.querySelector(`#card-${l.letter} [data-n="${t.n}"]`);
+const mine=l=>picks[l.round]||[];
+const clips=l=>[...l.kept.map((c,i)=>({...c,id:`k${i}`})),...l.takes.map(t=>({...t,id:`t${t.n}`}))];
+const chosen=l=>clips(l).find(c=>c.n===mine(l)[0])||clips(l)[0];
+const takeEl=(l,c)=>document.querySelector(`#card-${l.letter} [data-id="${c.id}"]`);
 
 function render(){
   document.getElementById("cards").innerHTML=letters.map(l=>`
-  <section class="card${picks[l.letter]?" done":""}" id="card-${l.letter}">
+  <section class="card${mine(l).length?" done":""}" id="card-${l.letter}">
     <div class="head"><span class="L">${l.letter.toUpperCase()}</span><span class="ipa">${l.ipa}</span><span class="ex">${l.keywords.join(", ")}</span></div>
-    <div class="takes">${l.takes.length?l.takes.map(t=>`
-      <span class="take${picks[l.letter]===t.n?" mine":""}" data-n="${t.n}">
-        <button class="play" data-l="${l.letter}" data-n="${t.n}">take ${t.n}<small>${t.pick?"now":"&nbsp;"}</small></button>
+    <div class="takes">${l.kept.map((c,i)=>`
+      <span class="take kept" data-id="k${i}"><button class="play" data-l="${l.letter}" data-id="k${i}">${c.label}<small>kept</small></button></span>`).join("")}${l.takes.length?l.takes.map(t=>`
+      <span class="take${mine(l).includes(t.n)?" mine":""}" data-id="t${t.n}">
+        <button class="play" data-l="${l.letter}" data-id="t${t.n}">take ${t.n}<small>new</small></button>
         <button class="star" data-l="${l.letter}" data-n="${t.n}" aria-label="Pick take ${t.n} for ${l.letter.toUpperCase()}">★</button>
-      </span>`).join(""):`<span class="none">No take passed yet.</span>`}</div>
+      </span>`).join(""):`<span class="none">No new take passed yet.</span>`}</div>
   </section>`).join("");
-  const n=letters.filter(l=>picks[l.letter]).length;
+  const n=letters.filter(l=>mine(l).length).length;
   document.getElementById("count").textContent=`${n} of ${letters.length} letters picked`;
 }
 
 document.addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
-  if(b.id==="playall"){queue=letters.filter(l=>l.takes.length);const step=()=>{const l=queue.shift();if(l){const t=chosen(l);play(t.file,takeEl(l,t),step)}};step();return}
+  if(b.id==="playall"){queue=letters.filter(l=>clips(l).length);const step=()=>{const l=queue.shift();if(l){const t=chosen(l);play(t.file,takeEl(l,t),step)}};step();return}
   if(b.id==="send")return send();
   const l=letters.find(x=>x.letter===b.dataset.l);if(!l)return;
-  const t=l.takes.find(x=>x.n===+b.dataset.n);queue=[];
-  if(b.classList.contains("star")){picks[l.letter]=picks[l.letter]===t.n?undefined:t.n;save();render();takeEl(l,t).querySelector(".star").focus()}
-  else play(t.file,b.parentElement);
+  queue=[];
+  if(b.classList.contains("star")){const n=+b.dataset.n,m=mine(l);picks[l.round]=m.includes(n)?m.filter(x=>x!==n):[...m,n];save();render();
+    document.querySelector(`#card-${l.letter} [data-id="t${n}"] .star`).focus()}
+  else play(clips(l).find(c=>c.id===b.dataset.id).file,b.parentElement);
 });
 
 document.addEventListener("keydown",e=>{
   if(e.metaKey||e.ctrlKey||e.altKey||e.target.closest("input,textarea"))return;
-  const l=letters.find(x=>x.letter===e.key.toLowerCase());if(!l||!l.takes.length)return;
+  const l=letters.find(x=>x.letter===e.key.toLowerCase());if(!l||!clips(l).length)return;
   const card=document.getElementById(`card-${l.letter}`);card.scrollIntoView({behavior:"smooth",block:"center"});
   const t=chosen(l);queue=[];play(t.file,takeEl(l,t));
 });
 
 function send(){
-  const lines=letters.filter(l=>picks[l.letter]).map(l=>`${l.letter}: take ${picks[l.letter]}`);
+  const lines=letters.flatMap(l=>mine(l).map(n=>`${l.letter}: take ${n}`));
   if(!lines.length){alert("Pick at least one take first: tap ★ next to the one that sounds best.");return}
   const body=`My picks:\n\n${lines.join("\n")}\n\nNotes (optional):\n`;
-  window.open(`${REPO}/issues/new?title=${encodeURIComponent(`Picks (${lines.length} letters)`)}&body=${encodeURIComponent(body)}`,"_blank");
+  window.open(`${REPO}/issues/new?title=${encodeURIComponent(`Picks (${lines.length} takes)`)}&body=${encodeURIComponent(body)}`,"_blank");
 }
 
 fetch("takes.json").then(r=>r.json()).then(d=>{letters=d;render()});
