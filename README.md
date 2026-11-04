@@ -41,7 +41,7 @@ One entry per letter:
 
 ### Suggest alternates
 
-On the [library page](https://purplecomputerorg.github.io/openlettersounds/), turn on **Show new takes to suggest as alternates**, star the takes you like, and press **Send**. That opens a GitHub issue with your picks filled in.
+On the [library page](https://purplecomputerorg.github.io/openlettersounds/), press **Suggest an alternate** under a letter to hear its new takes, star the ones you like, and press **Send alternate picks**. Stars carry across letters, and sending opens a GitHub issue with your picks filled in.
 
 ## Make the sounds yourself
 

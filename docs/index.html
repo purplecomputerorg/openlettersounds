@@ -9,16 +9,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700&family=Sora:wght@800&family=Caveat:wght@600&display=swap">
 <style>
-:root{--bg:#faf8f5;--card:#fff;--fg:#352a4a;--muted:#857698;--line:#e4dfe9;--accent:#5c2d91;--accent-dark:#4a2473;--magenta:#9b59d0;--fill:#ebe2fd;--fill-hover:#ded6f7;--border:#c4aee0;--on-accent:#fff;--stroke:#5c2d91;
+:root{--bg:#faf8f5;--card:#fff;--fg:#352a4a;--muted:#857698;--line:#e4dfe9;--accent:#5c2d91;--accent-dark:#4a2473;--magenta:#9b59d0;--fill:#ebe2fd;--fill-hover:#ded6f7;--border:#c4aee0;--on-accent:#fff;
 --display:"Sora","Figtree",system-ui,sans-serif;--body:"Figtree","Inter",system-ui,sans-serif;--hand:"Caveat",cursive;--mono:ui-monospace,"SF Mono",Menlo,monospace;
 --shadow:0 1px 2px #352a4a0d,0 8px 24px -12px #5c2d9126}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1424;--card:#241c31;--fg:#ece6f5;--muted:#a99bb8;--line:#3a2f4b;--accent:#c9a8f0;--accent-dark:#dcc6f7;--magenta:#b77ce0;--fill:#33264a;--fill-hover:#3d2e57;--border:#5a4677;--on-accent:#1a1424;--stroke:#b77ce0;--shadow:0 1px 2px #0006;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#1a1424;--card:#241c31;--fg:#ece6f5;--muted:#a99bb8;--line:#3a2f4b;--accent:#c9a8f0;--accent-dark:#dcc6f7;--magenta:#b77ce0;--fill:#33264a;--fill-hover:#3d2e57;--border:#5a4677;--on-accent:#1a1424;--stroke:#b77ce0;--shadow:0 1px 2px #0006;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1424;--card:#241c31;--fg:#ece6f5;--muted:#a99bb8;--line:#3a2f4b;--accent:#c9a8f0;--accent-dark:#dcc6f7;--magenta:#b77ce0;--fill:#33264a;--fill-hover:#3d2e57;--border:#5a4677;--on-accent:#1a1424;--shadow:0 1px 2px #0006;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1a1424;--card:#241c31;--fg:#ece6f5;--muted:#a99bb8;--line:#3a2f4b;--accent:#c9a8f0;--accent-dark:#dcc6f7;--magenta:#b77ce0;--fill:#33264a;--fill-hover:#3d2e57;--border:#5a4677;--on-accent:#1a1424;--shadow:0 1px 2px #0006;color-scheme:dark}
 *{box-sizing:border-box}
 html{-webkit-font-smoothing:antialiased}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;position:relative;overflow-x:hidden}
-/* the landing site's faint paint stroke, running down behind the page */
-body::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.07;background:no-repeat center top/min(1100px,100%) 100% url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 1000' preserveAspectRatio='none'%3E%3Cpath d='M65 0Q115 100 65 200T65 400T65 600T65 800T65 1000' fill='none' stroke='%239b59d0' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E")}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55}
 main{max-width:1080px;margin:0 auto;padding:40px 16px 120px;display:grid;gap:28px}
 header{display:grid;gap:14px;padding:8px 0 4px}
 .brand{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-weight:500;font-size:.95rem;text-decoration:none;width:fit-content}
@@ -30,17 +28,8 @@ p{margin:0;color:var(--muted);max-width:66ch}
 .hint{font-family:var(--hand);font-size:1.45rem;color:var(--magenta);line-height:1.2}
 a{color:var(--accent);text-underline-offset:3px}
 .actions{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin-top:6px}
-.btn{font:inherit;font-weight:700;border-radius:999px;padding:10px 22px;cursor:pointer;text-decoration:none;min-height:48px;display:inline-flex;align-items:center;gap:8px;
-  border:3px solid transparent;color:var(--accent);background:linear-gradient(var(--fill),var(--fill)) padding-box,linear-gradient(to right,var(--accent) 50%,var(--magenta) 50%) border-box;transition:background .15s}
-.btn:hover{background:linear-gradient(var(--fill-hover),var(--fill-hover)) padding-box,linear-gradient(to right,var(--accent-dark) 50%,var(--magenta) 50%) border-box}
-.btn.primary{color:var(--on-accent);background:linear-gradient(var(--accent),var(--accent)) padding-box,linear-gradient(to right,var(--accent) 50%,var(--magenta) 50%) border-box}
-.btn.primary:hover{background:linear-gradient(var(--accent-dark),var(--accent-dark)) padding-box,linear-gradient(to right,var(--accent-dark) 50%,var(--magenta) 50%) border-box}
-.switch{font:inherit;font-weight:500;background:none;border:0;color:var(--fg);cursor:pointer;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0}
-.track{width:44px;height:26px;border-radius:13px;background:var(--line);position:relative;flex:none;transition:background .15s}
-.knob{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--card);box-shadow:0 1px 2px #0003;transition:left .15s}
-.switch[aria-checked="true"] .track{background:var(--magenta)}.switch[aria-checked="true"] .knob{left:21px}
-.note{display:none;background:var(--fill);border:1px solid var(--border);border-radius:20px;padding:14px 18px;color:var(--fg)}
-.suggesting .note{display:block}
+.btn{font:inherit;font-weight:700;border-radius:999px;padding:10px 22px;cursor:pointer;text-decoration:none;min-height:48px;display:inline-flex;align-items:center;gap:8px;border:0;color:var(--on-accent);background:var(--accent);transition:background .15s}
+.btn:hover{background:var(--accent-dark)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;display:grid;gap:14px;align-content:start;scroll-margin-top:16px;box-shadow:var(--shadow);transition:border-color .15s}
 .card:hover{border-color:var(--border)}
@@ -63,12 +52,22 @@ a{color:var(--accent);text-underline-offset:3px}
 .clip.mine{border-color:var(--magenta)}.clip.mine .star{color:var(--magenta)}
 .clip.playing{outline:3px solid var(--magenta);outline-offset:2px}
 .label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.cands{display:none;gap:8px;border-top:1px dashed var(--border);padding-top:14px}
-.suggesting .cands{display:grid}
+.suggest{font:inherit;font-size:.92rem;background:none;border:0;padding:4px 0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer;justify-self:start}
+.suggest:hover{color:var(--accent)}
+.card.done .suggest{color:var(--magenta);font-weight:700}
+dialog{border:0;border-radius:24px;padding:0;width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 48px);background:var(--card);color:var(--fg);box-shadow:0 24px 60px -20px #352a4a80}
+dialog::backdrop{background:#352a4a59;backdrop-filter:blur(2px)}
+.modal{padding:22px;display:grid;gap:16px}
+.modal .top{justify-content:space-between}
+.modal .top>div{display:flex;gap:14px;align-items:center}
+.close{font:inherit;font-size:1.4rem;line-height:1;background:none;border:0;color:var(--muted);cursor:pointer;width:44px;height:44px;border-radius:50%}
+.close:hover{background:var(--fill);color:var(--accent)}
+.modal-foot{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:flex-end}
+.modal-foot span{flex:1 1 10em;color:var(--muted);font-size:.92rem}
 .none{color:var(--muted);font-style:italic;font-size:.9rem}
 button:focus-visible,a:focus-visible{outline:3px solid var(--magenta);outline-offset:2px}
 .bar{display:none;position:fixed;inset:auto 0 0 0;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(8px);border-top:1px solid var(--border);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
-.suggesting .bar{display:block}
+.bar.on{display:block}
 .bar div{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
 .bar span{flex:1 1 10em;color:var(--muted)}
 footer{color:var(--muted);font-size:.92rem;border-top:1px solid var(--line);padding-top:20px;display:flex;gap:12px;align-items:center}
@@ -86,19 +85,18 @@ footer p{max-width:none}
   <p>They are <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, so you can use them in anything, with no credit needed. Every clip is a short mono WAV, trimmed and set to the same loudness.</p>
   <p class="hint">Press a letter key to hear its sound!</p>
   <div class="actions">
-    <a class="btn primary" id="zip" download>Download all sounds (.zip)</a>
-    <button class="switch" id="suggest" role="switch" aria-checked="false"><span class="track"><span class="knob"></span></span><span id="suggest-label">Show new takes to suggest as alternates</span></button>
+    <a class="btn" id="zip" download>Download all sounds (.zip)</a>
     <a href="https://github.com/purplecomputerorg/openlettersounds">How they are made, on GitHub</a>
   </div>
 </header>
-<div class="note">Each letter now also shows new takes that passed the automatic checks, best guess first. Tap one to hear it, tap ★ on any that would make a good alternate (as many as you like), then send your picks. They stay in this browser until you do.</div>
 <div class="grid" id="cards"></div>
 <footer><svg viewBox="40 30 120 145" aria-hidden="true"><path d="M100 65A45 45 0 0 0 100 155Z" fill="#5c2d91"/><path d="M100 65A45 45 0 0 1 100 155Z" fill="#9b59d0"/><circle cx="100" cy="110" r="32" fill="#ebe2fd"/><circle cx="90" cy="106" r="5" fill="#5c2d91"/><circle cx="110" cy="106" r="5" fill="#5c2d91"/><path d="M88 120Q100 128 112 120" stroke="#5c2d91" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M85 68V50" stroke="#5c2d91" stroke-width="5" stroke-linecap="round"/><circle cx="85" cy="47" r="6" fill="#9b59d0"/><path d="M115 68V50" stroke="#9b59d0" stroke-width="5" stroke-linecap="round"/><circle cx="115" cy="47" r="6" fill="#5c2d91"/><circle cx="85" cy="160" r="10" fill="#5c2d91"/><circle cx="115" cy="160" r="10" fill="#9b59d0"/></svg><p>Made by <a href="https://purplecomputer.org">Purple Computer</a>. The voice is synthetic (OpenAI <code>gpt-audio-1.5</code>, voice marin). Each clip's exact prompt is in <code>sounds.json</code>, inside the zip.</p></footer>
 </main>
 <div class="bar"><div>
 <span id="count"></span>
-<button class="btn primary" id="send">Send alternate picks</button>
+<button class="btn" id="send">Send alternate picks</button>
 </div></div>
+<dialog id="modal" aria-labelledby="modal-title"><div class="modal" id="modal-body"></div></dialog>
 <script>
 const REPO="https://github.com/purplecomputerorg/openlettersounds";
 const KEY="openlettersounds-picks-by-round";
@@ -124,34 +122,52 @@ const libClip=(l,c,i)=>`<span class="clip${i?"":" main"}" data-id="k${i}">
   <a class="side" href="${c.file}" download="${name(c.file)}" aria-label="Download ${name(c.file)}">⬇ WAV</a></span>`;
 const candClip=(l,c)=>`<span class="clip${mine(l).includes(c.n)?" mine":""}" data-id="c${c.n}">
   <button data-l="${l.letter}" data-id="c${c.n}">▶ take ${c.n}</button>
-  <button class="side star" data-l="${l.letter}" data-n="${c.n}" aria-label="Suggest take ${c.n} as an alternate for ${l.letter.toUpperCase()}">★</button></span>`;
+  <button class="side star" data-l="${l.letter}" data-n="${c.n}" aria-pressed="${mine(l).includes(c.n)}" aria-label="Suggest take ${c.n} as an alternate for ${l.letter.toUpperCase()}">★</button></span>`;
+const modal=document.getElementById("modal");
+let current=null; // the letter whose new takes the modal shows
+const total=()=>letters.reduce((a,l)=>a+mine(l).length,0);
+const head=l=>`<span class="L">${l.letter.toUpperCase()}</span><div><span class="ipa">${l.ipa}</span><span class="ex">${l.keywords.join(", ")}</span></div>`;
 
 function render(){
-  document.getElementById("cards").innerHTML=letters.map(l=>`
-  <section class="card${mine(l).length?" done":""}" id="card-${l.letter}">
-    <div class="top"><span class="L">${l.letter.toUpperCase()}</span><div><span class="ipa">${l.ipa}</span><span class="ex">${l.keywords.join(", ")}</span></div></div>
+  document.getElementById("cards").innerHTML=letters.map(l=>{const m=mine(l).length;return `
+  <section class="card${m?" done":""}" id="card-${l.letter}">
+    <div class="top">${head(l)}</div>
     ${l.library.length?`<div class="row">${libClip(l,l.library[0],0)}</div>`:`<span class="none">No clip yet.</span>`}
     ${l.library.length>1?`<div class="label">Alternates</div><div class="row">${l.library.slice(1).map((c,i)=>libClip(l,c,i+1)).join("")}</div>`:""}
-    <div class="cands"><div class="label">New takes to suggest</div>
-      <div class="row">${l.candidates.map(c=>candClip(l,c)).join("")||`<span class="none">None right now.</span>`}</div></div>
-  </section>`).join("");
-  const n=letters.reduce((a,l)=>a+mine(l).length,0);
-  document.getElementById("count").textContent=n?`${n} alternate${n>1?"s":""} picked`:"Tap ★ on takes you would like as alternates";
+    ${l.candidates.length?`<button class="suggest" data-open="${l.letter}">${m?`★ ${m} picked, change`:"Suggest an alternate"}</button>`:""}
+  </section>`}).join("");
+  const n=total();
+  document.getElementById("count").textContent=`${n} alternate${n>1?"s":""} picked`;
+  document.querySelector(".bar").classList.toggle("on",n>0);
+  if(current)renderModal();
+}
+
+function renderModal(){
+  const l=current,m=mine(l).length;
+  document.getElementById("modal-body").innerHTML=`
+  <div class="top"><div id="modal-title">${head(l)}</div><button class="close" data-close aria-label="Close">✕</button></div>
+  <p>New takes of ${l.letter.toUpperCase()} that passed the automatic checks, best guess first. Tap one to hear it, and tap ★ on any that would make a good alternate.</p>
+  <div class="row">${l.candidates.map(c=>candClip(l,c)).join("")}</div>
+  <div class="modal-foot"><span>${m?`${m} picked for ${l.letter.toUpperCase()}. Picks stay in this browser until you send them.`:""}</span>
+    ${total()?`<button class="btn" id="send">Send alternate picks</button>`:""}<button class="btn" data-close>Done</button></div>`;
 }
 
 document.addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
-  if(b.id==="suggest"){const on=document.body.classList.toggle("suggesting");b.setAttribute("aria-checked",on);
-    document.getElementById("suggest-label").textContent=on?"Hide new takes":"Show new takes to suggest as alternates";return}
+  if(b.dataset.open){current=letters.find(x=>x.letter===b.dataset.open);renderModal();modal.showModal();return}
+  if(b.hasAttribute("data-close"))return modal.close();
   if(b.id==="send")return send();
   const l=letters.find(x=>x.letter===b.dataset.l);if(!l)return;
   if(b.classList.contains("star")){const n=+b.dataset.n,m=mine(l);picks[l.round]=m.includes(n)?m.filter(x=>x!==n):[...m,n];save();render();
-    document.querySelector(`#card-${l.letter} [data-n="${n}"]`).focus();return}
+    modal.querySelector(`[data-n="${n}"]`).focus();return}
   play(find(l,b.dataset.id).file,b.parentElement);
 });
+// a click on the backdrop (the dialog itself, outside its body) closes it
+modal.addEventListener("click",e=>{if(e.target===modal)modal.close()});
+modal.addEventListener("close",()=>{audio?.pause();const l=current;current=null;document.querySelector(`#card-${l.letter} .suggest`)?.focus()});
 
 document.addEventListener("keydown",e=>{
-  if(e.metaKey||e.ctrlKey||e.altKey||e.target.closest("input,textarea"))return;
+  if(modal.open||e.metaKey||e.ctrlKey||e.altKey||e.target.closest("input,textarea"))return;
   const l=letters.find(x=>x.letter===e.key.toLowerCase());if(!l||!l.library.length)return;
   document.getElementById(`card-${l.letter}`).scrollIntoView({behavior:"smooth",block:"center"});
   play(l.library[0].file,mainEl(l));
