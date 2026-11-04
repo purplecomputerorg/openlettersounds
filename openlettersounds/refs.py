@@ -7,7 +7,7 @@ from . import ROOT
 from .sounds import SOUNDS
 
 DIR = ROOT / "refs"
-UA = {"User-Agent": "nemophones/0.1 (https://github.com/tavinathanson/nemophones)"}
+UA = {"User-Agent": "openlettersounds/0.1 (https://github.com/purplecomputerorg/openlettersounds)"}
 
 # Feed the Monster (Curious Learning), audio CC BY: github.com/curiouslearning/FeedTheMonsterJS
 FTM = "https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterJS/main/lang/{lang}/audios/{name}.mp3"

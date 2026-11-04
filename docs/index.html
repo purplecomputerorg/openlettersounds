@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Nemophones</title>
+<title>Open Letter Sounds</title>
 <meta name="description" content="Free phonics sounds for US English: one clean clip per letter sound, plus alternates. CC0.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@600&display=swap">
 <style>
@@ -58,26 +58,26 @@ footer{color:var(--muted);font-size:.9rem}
 <body>
 <main>
 <header>
-  <h1>Nemophones</h1>
+  <h1>Open Letter Sounds</h1>
   <p>Free phonics sounds for US English: one clean clip for each letter sound, plus alternates. They are <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, so you can use them in anything, with no credit needed. Every clip is a short mono WAV, trimmed and set to the same loudness.</p>
   <p>Press a letter key to hear its sound.</p>
   <div class="actions">
     <a class="btn primary" id="zip" download>Download all sounds (.zip)</a>
     <button class="switch" id="suggest" role="switch" aria-checked="false"><span class="track"><span class="knob"></span></span><span id="suggest-label">Show new takes to suggest as alternates</span></button>
-    <a href="https://github.com/tavinathanson/nemophones">How they are made, on GitHub</a>
+    <a href="https://github.com/purplecomputerorg/openlettersounds">How they are made, on GitHub</a>
   </div>
 </header>
 <div class="note">Each letter now also shows new takes that passed the automatic checks, best guess first. Tap one to hear it, tap ★ on any that would make a good alternate (as many as you like), then send your picks. They stay in this browser until you do.</div>
 <div class="grid" id="cards"></div>
-<footer>The voice is synthetic (OpenAI <code>gpt-audio-1.5</code>, voice marin). Each clip's exact prompt is in <code>sounds.json</code>, inside the zip.</footer>
+<footer>Made by <a href="https://purplecomputer.org">Purple Computer</a>. The voice is synthetic (OpenAI <code>gpt-audio-1.5</code>, voice marin). Each clip's exact prompt is in <code>sounds.json</code>, inside the zip.</footer>
 </main>
 <div class="bar"><div>
 <span id="count"></span>
 <button class="btn primary" id="send">Send alternate picks</button>
 </div></div>
 <script>
-const REPO="https://github.com/tavinathanson/nemophones";
-const KEY="nemophones-picks-by-round";
+const REPO="https://github.com/purplecomputerorg/openlettersounds";
+const KEY="openlettersounds-picks-by-round";
 let picks={};
 try{picks=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(picks))}catch(e){}};

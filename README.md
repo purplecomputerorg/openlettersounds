@@ -1,12 +1,12 @@
-# nemophones
+# Open Letter Sounds
 
-Open phonics sounds: one clean clip per letter sound, free for any use.
+Open phonics sounds: one clean clip per letter sound, free for any use. Made by [Purple Computer](https://purplecomputer.org).
 
 `sounds/en-us/marin/` has the 26 letter sounds of US English phonics (short vowels, hard C and G, X as /ks/, Q as /kw/), with `sounds.json` giving each clip's IPA, example words, and the exact prompt and take that produced it. Clips are mono 16-bit WAV, trimmed and level-matched. Entries with `"reviewed": true` were picked by a person; `"reviewed": false` passed the automatic checks but have not yet had a final listen. Each entry's `alts` lists alternate takes of the same sound (`<letter>-alt1.wav` and so on), also picked by a person, for apps that want variety.
 
 ## How the sounds are made
 
-1. **Generate.** OpenAI's `gpt-audio-1.5` (voice `marin`) is prompted as a phonics teacher, from a text spec per sound in `nemophones/sounds.py`: example words, how it is made, what it is not ("short A as in apple, not 'ah'"). Each sound gets 20 to 40 takes. No audio is given to the model. Attaching a take a person had picked, and asking for more like it, was tried and made later takes shorter, noisier and buzzier for almost every sound, so picks guide the judge instead (below).
+1. **Generate.** OpenAI's `gpt-audio-1.5` (voice `marin`) is prompted as a phonics teacher, from a text spec per sound in `openlettersounds/sounds.py`: example words, how it is made, what it is not ("short A as in apple, not 'ah'"). Each sound gets 20 to 40 takes. No audio is given to the model. Attaching a take a person had picked, and asking for more like it, was tried and made later takes shorter, noisier and buzzier for almost every sound, so picks guide the judge instead (below).
 2. **Check.** Every take is measured and rejected if a listener would object: a breath or pause before the sound, noise instead of a crisp release, a voiced stop that came out unvoiced (B sounding like P), an added "uh", a hold that wobbles, static in place of a hiss. A wav2vec2 phoneme recognizer reports what it hears.
 3. **Rank.** Takes the recognizer hears cleanly come first, then by how close they are to reference recordings of the same sound, compared frame by frame on the recognizer's output. That closeness separates held sounds well but barely separates clipped stops, so with `--judge` a second listener re-ranks the top six: Gemini (its latest Pro model) when `GEMINI_API_KEY` is set, else `gpt-audio-1.5`, hears the teachers' reference recordings, then two of our takes, and says which one a child should hear (clearly the sound, natural and warm, not harsh or spitty). Once a person has picked a take for a sound (`exemplars/marin/`), the judge hears it too, as the sound and feel they want. Every pair is played in both orders, takes are re-ranked by wins, and every verdict with its reason is cached under `build/judge/`.
 4. **Finish.** The best take is trimmed to the sound, long holds are capped with a fade, and every clip is set to the same loudness.
@@ -18,7 +18,7 @@ Text to speech engines (Piper, Kokoro, ElevenLabs and the like) speak whatever t
 
 ### Worked example: B
 
-**The spec.** One line in `nemophones/sounds.py`:
+**The spec.** One line in `openlettersounds/sounds.py`:
 
 ```python
 _stop("b", "/b/", ("ball", "bat", "bed"), True, "p")   # letter, IPA, example words, voiced, voiceless partner
@@ -54,22 +54,22 @@ The system message is the same for every sound. The user message changes with th
 | Vowel | A E I O U | short, steady, fully voiced, about a third of a second | Letter A: produce the short A vowel /æ/, as in 'apple', 'cat', 'hat': a short, steady, fully voiced vowel with a pure clear tone, never breathy, about a third of a second. NOT 'ah' as in 'father', or 'ay' as in 'cake'. |
 | Glide | Q W X Y | the sound alone, stopped before any vowel (X is the /ks/ at the end of 'fox'); W and Y fully voiced, with only the faintest hint of a vowel | Letter W: produce the /w/ sound heard at the start of 'web', 'wet', 'wig': lips tightly rounded as for 'oo', voice on from the very start, gliding open into only the faintest clipped hint of a vowel, the way a teacher says it at the start of 'wet', about a quarter of a second. Fully voiced and clearly audible, never whispered or breathy. NOT a long 'wuh', or the letter name 'double-u'. |
 
-`python -m nemophones prompts` prints the system message and all 26 user messages exactly as sent.
+`python -m openlettersounds prompts` prints the system message and all 26 user messages exactly as sent.
 
-**[Listen and download](https://tavinathanson.github.io/nemophones/)**: every clip and alternate, a zip of the whole library, and new takes you can suggest as alternates through a GitHub issue.
+**[Listen and download](https://purplecomputerorg.github.io/openlettersounds/)**: every clip and alternate, a zip of the whole library, and new takes you can suggest as alternates through a GitHub issue.
 
 ## Run it
 
 ```bash
-pip install -e .                     # numpy, onnxruntime, httpx; ffmpeg on PATH
-python -m nemophones refs            # download references to refs/ (not redistributed)
-python -m nemophones prompts [letters] # print the exact messages sent to the model
-cp .env.example .env                 # then put your OpenAI key in .env
-python -m nemophones generate [letters] --takes 10
-python -m nemophones check [letters] [--judge] # gate, rank (--judge: audio model re-ranks the top, needs the key), write the best take to sounds/
-python -m nemophones pick < picks.txt # keep picks pasted from the page ("b: take 37" lines): first per letter is the clip, later ones alternates
-python -m nemophones page            # build/review.html
-python -m nemophones site            # docs/: the public library page and download zip (GitHub Pages, main /docs)
+pip install -e .                              # numpy, onnxruntime, httpx; ffmpeg on PATH
+python -m openlettersounds refs               # download references to refs/ (not redistributed)
+python -m openlettersounds prompts [letters]  # print the exact messages sent to the model
+cp .env.example .env                          # then put your OpenAI key in .env
+python -m openlettersounds generate [letters] --takes 10
+python -m openlettersounds check [letters] [--judge] # gate, rank (--judge: audio model re-ranks the top, needs the key), write the best take to sounds/
+python -m openlettersounds pick < picks.txt   # keep picks pasted from the page ("b: take 37" lines): first per letter is the clip, later ones alternates
+python -m openlettersounds page               # build/review.html
+python -m openlettersounds site               # docs/: the public library page and download zip (GitHub Pages, main /docs)
 ```
 
 Takes are cached by a hash of the model, voice and prompt, so editing a sound's spec starts a fresh set and rerunning is free.

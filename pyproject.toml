@@ -1,7 +1,7 @@
 [project]
-name = "nemophones"
+name = "openlettersounds"
 version = "0.1.0"
-description = "Open phonics sounds: one clean clip per letter sound, generated and checked against reference recordings"
+description = "Open letter sounds: one clean clip per phonics letter sound, generated and checked against reference recordings. By Purple Computer."
 license = "MIT"
 requires-python = ">=3.11"
 dependencies = ["numpy", "onnxruntime", "httpx"]
@@ -11,7 +11,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["nemophones"]
+packages = ["openlettersounds"]
 
 [tool.setuptools.package-data]
-nemophones = ["page.html"]
+openlettersounds = ["page.html"]

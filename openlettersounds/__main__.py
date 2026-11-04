@@ -1,4 +1,4 @@
-"""python -m nemophones {refs | prompts | generate | check | pick | page | site | all} [letters] [--takes N] [--judge]"""
+"""python -m openlettersounds {refs | prompts | generate | check | pick | page | site | all} [letters] [--takes N] [--judge]"""
 import argparse
 import re
 import sys
@@ -8,7 +8,7 @@ from .sounds import BY_LETTER, SOUNDS
 
 
 def main():
-    ap = argparse.ArgumentParser(prog="nemophones")
+    ap = argparse.ArgumentParser(prog="openlettersounds")
     ap.add_argument("step", choices=("refs", "prompts", "generate", "check", "pick", "page", "site", "all"))
     ap.add_argument("letters", nargs="?", default="", help="e.g. bdg; default all")
     ap.add_argument("--takes", type=int, default=10)

@@ -13,7 +13,7 @@ from .sounds import SOUNDS
 OUT = ROOT / "docs"
 AUDIO = OUT / "audio"  # candidate takes, as small Vorbis files
 CLIPS = OUT / "sounds"  # library WAVs, as shipped
-ZIP = f"nemophones-{LIBRARY.parent.name}-{LIBRARY.name}.zip"
+ZIP = f"openlettersounds-{LIBRARY.parent.name}-{LIBRARY.name}.zip"
 
 
 def _sync(folder, wanted):
@@ -40,7 +40,7 @@ def _zip(files):
     """Every library clip with its metadata and license; fixed timestamps so an unchanged library zips identically."""
     with zipfile.ZipFile(OUT / ZIP, "w", zipfile.ZIP_DEFLATED) as z:
         for f in files:
-            z.writestr(zipfile.ZipInfo(f"nemophones/{f.name}", (1980, 1, 1, 0, 0, 0)), f.read_bytes())
+            z.writestr(zipfile.ZipInfo(f"openlettersounds/{f.name}", (1980, 1, 1, 0, 0, 0)), f.read_bytes())
 
 
 def build():
@@ -56,6 +56,6 @@ def build():
     _sync(AUDIO, {c["file"].split("/")[-1] for e in letters for c in e["candidates"]})
     _zip([*wavs, META, LIBRARY.parent.parent / "LICENSE"])
     (OUT / "takes.json").write_text(json.dumps(dict(zip=ZIP, letters=letters), ensure_ascii=False))
-    shutil.copyfile(ROOT / "nemophones" / "site.html", OUT / "index.html")
+    shutil.copyfile(ROOT / "openlettersounds" / "site.html", OUT / "index.html")
     size = sum(f.stat().st_size for f in OUT.rglob("*") if f.is_file())
     print(OUT, len(wavs), "library clips,", sum(len(e["candidates"]) for e in letters), "candidates,", size // 1024, "KB")

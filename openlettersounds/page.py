@@ -50,5 +50,5 @@ def build():
     body = "\n".join(_row(s, report[s.letter]) for s in SOUNDS if s.letter in report)
     final = "".join(_btn(e["letter"].upper(), LIBRARY / e["file"], e["ipa"])
                     for e in json.loads((LIBRARY / "sounds.json").read_text()))
-    OUT.write_text((ROOT / "nemophones" / "page.html").read_text().replace("{{ROWS}}", body).replace("{{FINAL}}", final))
+    OUT.write_text((ROOT / "openlettersounds" / "page.html").read_text().replace("{{ROWS}}", body).replace("{{FINAL}}", final))
     print(OUT, OUT.stat().st_size // 1024, "KB")
