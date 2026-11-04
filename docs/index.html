@@ -5,62 +5,86 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Open Letter Sounds</title>
 <meta name="description" content="Free phonics sounds for US English: one clean clip per letter sound, plus alternates. CC0.">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@600&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='40 30 120 145'%3E%3Cpath d='M100 65A45 45 0 0 0 100 155Z' fill='%235c2d91'/%3E%3Cpath d='M100 65A45 45 0 0 1 100 155Z' fill='%239b59d0'/%3E%3Ccircle cx='100' cy='110' r='32' fill='%23ebe2fd'/%3E%3Ccircle cx='90' cy='106' r='5' fill='%235c2d91'/%3E%3Ccircle cx='110' cy='106' r='5' fill='%235c2d91'/%3E%3Cpath d='M88 120Q100 128 112 120' stroke='%235c2d91' stroke-width='3' stroke-linecap='round' fill='none'/%3E%3Cpath d='M85 68V50' stroke='%235c2d91' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='85' cy='47' r='6' fill='%239b59d0'/%3E%3Cpath d='M115 68V50' stroke='%239b59d0' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='115' cy='47' r='6' fill='%235c2d91'/%3E%3Ccircle cx='85' cy='160' r='10' fill='%235c2d91'/%3E%3Ccircle cx='115' cy='160' r='10' fill='%239b59d0'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700&family=Sora:wght@800&family=Caveat:wght@600&display=swap">
 <style>
-:root{--bg:#f8f8fb;--card:#fff;--fg:#1d1b29;--muted:#66637a;--line:#e1dfea;--accent:#3d5afe;--chip:#eceef8;--star:#d08a00;
---display:"Fredoka",ui-rounded,system-ui,sans-serif;--body:"Atkinson Hyperlegible",system-ui,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,monospace}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13131a;--card:#1a1a24;--fg:#e9e8f2;--muted:#9c99b3;--line:#2b2a38;--accent:#8c9eff;--chip:#24253a;--star:#ffc24d;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#13131a;--card:#1a1a24;--fg:#e9e8f2;--muted:#9c99b3;--line:#2b2a38;--accent:#8c9eff;--chip:#24253a;--star:#ffc24d;color-scheme:dark}
+:root{--bg:#faf8f5;--card:#fff;--fg:#352a4a;--muted:#857698;--line:#e4dfe9;--accent:#5c2d91;--accent-dark:#4a2473;--magenta:#9b59d0;--fill:#ebe2fd;--fill-hover:#ded6f7;--border:#c4aee0;--on-accent:#fff;--stroke:#5c2d91;
+--display:"Sora","Figtree",system-ui,sans-serif;--body:"Figtree","Inter",system-ui,sans-serif;--hand:"Caveat",cursive;--mono:ui-monospace,"SF Mono",Menlo,monospace;
+--shadow:0 1px 2px #352a4a0d,0 8px 24px -12px #5c2d9126}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1424;--card:#241c31;--fg:#ece6f5;--muted:#a99bb8;--line:#3a2f4b;--accent:#c9a8f0;--accent-dark:#dcc6f7;--magenta:#b77ce0;--fill:#33264a;--fill-hover:#3d2e57;--border:#5a4677;--on-accent:#1a1424;--stroke:#b77ce0;--shadow:0 1px 2px #0006;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1a1424;--card:#241c31;--fg:#ece6f5;--muted:#a99bb8;--line:#3a2f4b;--accent:#c9a8f0;--accent-dark:#dcc6f7;--magenta:#b77ce0;--fill:#33264a;--fill-hover:#3d2e57;--border:#5a4677;--on-accent:#1a1424;--stroke:#b77ce0;--shadow:0 1px 2px #0006;color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5}
-main{max-width:1040px;margin:0 auto;padding:32px 16px 120px;display:grid;gap:20px}
-header{display:grid;gap:8px}
-h1{font-family:var(--display);font-weight:600;font-size:2.6rem;margin:0;color:var(--accent);line-height:1.1}
+html{-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;position:relative;overflow-x:hidden}
+/* the landing site's faint paint stroke, running down behind the page */
+body::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.07;background:no-repeat center top/min(1100px,100%) 100% url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 1000' preserveAspectRatio='none'%3E%3Cpath d='M65 0Q115 100 65 200T65 400T65 600T65 800T65 1000' fill='none' stroke='%239b59d0' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E")}
+main{max-width:1080px;margin:0 auto;padding:40px 16px 120px;display:grid;gap:28px}
+header{display:grid;gap:14px;padding:8px 0 4px}
+.brand{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-weight:500;font-size:.95rem;text-decoration:none;width:fit-content}
+.brand svg{width:28px;height:34px}
+.brand:hover{color:var(--accent)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2.3rem,7vw,3.6rem);letter-spacing:-.035em;margin:0;color:var(--accent);line-height:1.05}
+.lead{font-size:clamp(1.1rem,2.6vw,1.35rem);font-weight:500;color:var(--fg);max-width:40ch}
 p{margin:0;color:var(--muted);max-width:66ch}
-a{color:var(--accent)}
-.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
-.btn{font:inherit;font-weight:700;border-radius:10px;padding:10px 16px;cursor:pointer;border:1px solid var(--accent);background:none;color:var(--accent);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
-.btn.primary{background:var(--accent);color:var(--bg)}
-.switch{font:inherit;font-weight:700;background:none;border:0;color:var(--fg);cursor:pointer;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0}
+.hint{font-family:var(--hand);font-size:1.45rem;color:var(--magenta);line-height:1.2}
+a{color:var(--accent);text-underline-offset:3px}
+.actions{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin-top:6px}
+.btn{font:inherit;font-weight:700;border-radius:999px;padding:10px 22px;cursor:pointer;text-decoration:none;min-height:48px;display:inline-flex;align-items:center;gap:8px;
+  border:3px solid transparent;color:var(--accent);background:linear-gradient(var(--fill),var(--fill)) padding-box,linear-gradient(to right,var(--accent) 50%,var(--magenta) 50%) border-box;transition:background .15s}
+.btn:hover{background:linear-gradient(var(--fill-hover),var(--fill-hover)) padding-box,linear-gradient(to right,var(--accent-dark) 50%,var(--magenta) 50%) border-box}
+.btn.primary{color:var(--on-accent);background:linear-gradient(var(--accent),var(--accent)) padding-box,linear-gradient(to right,var(--accent) 50%,var(--magenta) 50%) border-box}
+.btn.primary:hover{background:linear-gradient(var(--accent-dark),var(--accent-dark)) padding-box,linear-gradient(to right,var(--accent-dark) 50%,var(--magenta) 50%) border-box}
+.switch{font:inherit;font-weight:500;background:none;border:0;color:var(--fg);cursor:pointer;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0}
 .track{width:44px;height:26px;border-radius:13px;background:var(--line);position:relative;flex:none;transition:background .15s}
 .knob{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--card);box-shadow:0 1px 2px #0003;transition:left .15s}
-.switch[aria-checked="true"] .track{background:var(--star)}.switch[aria-checked="true"] .knob{left:21px}
-.note{display:none;background:var(--card);border:1px solid var(--star);border-radius:12px;padding:12px 16px;color:var(--fg)}
+.switch[aria-checked="true"] .track{background:var(--magenta)}.switch[aria-checked="true"] .knob{left:21px}
+.note{display:none;background:var(--fill);border:1px solid var(--border);border-radius:20px;padding:14px 18px;color:var(--fg)}
 .suggesting .note{display:block}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:12px;align-content:start;scroll-margin-top:16px}
-.card.done{border-color:var(--star)}
-.top{display:flex;gap:12px;align-items:center}
-.L{font-family:var(--display);font-size:2.8rem;font-weight:600;color:var(--accent);line-height:1;min-width:1.4ch}
-.ipa{font-family:var(--mono);font-size:.95rem;display:block}
-.ex{color:var(--muted);font-size:.85rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;display:grid;gap:14px;align-content:start;scroll-margin-top:16px;box-shadow:var(--shadow);transition:border-color .15s}
+.card:hover{border-color:var(--border)}
+.card.done{border-color:var(--magenta)}
+.top{display:flex;gap:14px;align-items:center}
+/* the letter as a key sticker: a two-tone ring around a soft face */
+.L{font-family:var(--display);font-size:1.9rem;font-weight:800;color:var(--accent);line-height:1;width:58px;height:58px;flex:none;display:grid;place-items:center;border-radius:16px;border:4px solid transparent;
+  background:linear-gradient(var(--fill),var(--fill)) padding-box,linear-gradient(to right,var(--accent) 50%,var(--magenta) 50%) border-box}
+.ipa{font-family:var(--mono);font-size:.95rem;display:block;color:var(--fg)}
+.ex{color:var(--muted);font-size:.9rem}
 .row{display:flex;flex-wrap:wrap;gap:8px}
-.clip{display:inline-flex;border:1px solid var(--line);border-radius:12px;background:var(--chip);overflow:hidden}
-.clip button,.clip a{font:inherit;background:none;border:0;color:var(--fg);cursor:pointer;padding:8px 12px;min-height:44px;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
-.clip .side{border-left:1px solid var(--line);color:var(--muted);padding:8px 10px}
+.clip{display:inline-flex;border:1px solid var(--border);border-radius:999px;background:var(--card);overflow:hidden}
+.clip button,.clip a{font:inherit;font-weight:500;background:none;border:0;color:var(--accent);cursor:pointer;padding:8px 14px;min-height:44px;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.clip button:hover,.clip a:hover{background:var(--fill)}
+.clip .side{border-left:1px solid var(--border);color:var(--muted);padding:8px 12px;font-size:.9rem}
 .clip.main{background:var(--accent);border-color:var(--accent)}
-.clip.main button,.clip.main a{color:var(--bg);font-weight:700}
-.clip.main .side{border-color:color-mix(in srgb,var(--bg) 35%,transparent)}
-.clip.mine{border-color:var(--star)}.clip.mine .star{color:var(--star)}
-.clip.playing{outline:3px solid var(--star);outline-offset:1px}
-.label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.cands{display:none;gap:6px;border-top:1px dashed var(--line);padding-top:12px}
+.clip.main button,.clip.main a{color:var(--on-accent);font-weight:700}
+.clip.main button:hover,.clip.main a:hover{background:var(--accent-dark)}
+.clip.main .side{border-color:color-mix(in srgb,var(--on-accent) 35%,transparent);color:var(--on-accent);font-weight:500}
+.clip.mine{border-color:var(--magenta)}.clip.mine .star{color:var(--magenta)}
+.clip.playing{outline:3px solid var(--magenta);outline-offset:2px}
+.label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.cands{display:none;gap:8px;border-top:1px dashed var(--border);padding-top:14px}
 .suggesting .cands{display:grid}
 .none{color:var(--muted);font-style:italic;font-size:.9rem}
-button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-.bar{display:none;position:fixed;inset:auto 0 0 0;background:var(--card);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
+button:focus-visible,a:focus-visible{outline:3px solid var(--magenta);outline-offset:2px}
+.bar{display:none;position:fixed;inset:auto 0 0 0;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(8px);border-top:1px solid var(--border);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
 .suggesting .bar{display:block}
-.bar div{max-width:1040px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.bar div{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
 .bar span{flex:1 1 10em;color:var(--muted)}
-footer{color:var(--muted);font-size:.9rem}
+footer{color:var(--muted);font-size:.92rem;border-top:1px solid var(--line);padding-top:20px;display:flex;gap:12px;align-items:center}
+footer svg{width:32px;height:38px;flex:none}
+footer p{max-width:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <main>
 <header>
+  <a class="brand" href="https://purplecomputer.org"><svg viewBox="40 30 120 145" aria-hidden="true"><path d="M100 65A45 45 0 0 0 100 155Z" fill="#5c2d91"/><path d="M100 65A45 45 0 0 1 100 155Z" fill="#9b59d0"/><circle cx="100" cy="110" r="32" fill="#ebe2fd"/><circle cx="90" cy="106" r="5" fill="#5c2d91"/><circle cx="110" cy="106" r="5" fill="#5c2d91"/><path d="M88 120Q100 128 112 120" stroke="#5c2d91" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M85 68V50" stroke="#5c2d91" stroke-width="5" stroke-linecap="round"/><circle cx="85" cy="47" r="6" fill="#9b59d0"/><path d="M115 68V50" stroke="#9b59d0" stroke-width="5" stroke-linecap="round"/><circle cx="115" cy="47" r="6" fill="#5c2d91"/><circle cx="85" cy="160" r="10" fill="#5c2d91"/><circle cx="115" cy="160" r="10" fill="#9b59d0"/></svg>From Purple Computer</a>
   <h1>Open Letter Sounds</h1>
-  <p>Free phonics sounds for US English: one clean clip for each letter sound, plus alternates. They are <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, so you can use them in anything, with no credit needed. Every clip is a short mono WAV, trimmed and set to the same loudness.</p>
-  <p>Press a letter key to hear its sound.</p>
+  <p class="lead">Free phonics sounds for US English: one clean clip for each letter sound, plus alternates.</p>
+  <p>They are <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, so you can use them in anything, with no credit needed. Every clip is a short mono WAV, trimmed and set to the same loudness.</p>
+  <p class="hint">Press a letter key to hear its sound!</p>
   <div class="actions">
     <a class="btn primary" id="zip" download>Download all sounds (.zip)</a>
     <button class="switch" id="suggest" role="switch" aria-checked="false"><span class="track"><span class="knob"></span></span><span id="suggest-label">Show new takes to suggest as alternates</span></button>
@@ -69,7 +93,7 @@ footer{color:var(--muted);font-size:.9rem}
 </header>
 <div class="note">Each letter now also shows new takes that passed the automatic checks, best guess first. Tap one to hear it, tap ★ on any that would make a good alternate (as many as you like), then send your picks. They stay in this browser until you do.</div>
 <div class="grid" id="cards"></div>
-<footer>Made by <a href="https://purplecomputer.org">Purple Computer</a>. The voice is synthetic (OpenAI <code>gpt-audio-1.5</code>, voice marin). Each clip's exact prompt is in <code>sounds.json</code>, inside the zip.</footer>
+<footer><svg viewBox="40 30 120 145" aria-hidden="true"><path d="M100 65A45 45 0 0 0 100 155Z" fill="#5c2d91"/><path d="M100 65A45 45 0 0 1 100 155Z" fill="#9b59d0"/><circle cx="100" cy="110" r="32" fill="#ebe2fd"/><circle cx="90" cy="106" r="5" fill="#5c2d91"/><circle cx="110" cy="106" r="5" fill="#5c2d91"/><path d="M88 120Q100 128 112 120" stroke="#5c2d91" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M85 68V50" stroke="#5c2d91" stroke-width="5" stroke-linecap="round"/><circle cx="85" cy="47" r="6" fill="#9b59d0"/><path d="M115 68V50" stroke="#9b59d0" stroke-width="5" stroke-linecap="round"/><circle cx="115" cy="47" r="6" fill="#5c2d91"/><circle cx="85" cy="160" r="10" fill="#5c2d91"/><circle cx="115" cy="160" r="10" fill="#9b59d0"/></svg><p>Made by <a href="https://purplecomputer.org">Purple Computer</a>. The voice is synthetic (OpenAI <code>gpt-audio-1.5</code>, voice marin). Each clip's exact prompt is in <code>sounds.json</code>, inside the zip.</p></footer>
 </main>
 <div class="bar"><div>
 <span id="count"></span>

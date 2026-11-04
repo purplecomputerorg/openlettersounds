@@ -1,8 +1,73 @@
 # Open Letter Sounds
 
-Open phonics sounds: one clean clip per letter sound, free for any use. Made by [Purple Computer](https://purplecomputer.org).
+Free phonics sounds for US English: one clean, short clip for each of the 26 letter sounds, plus alternates. [CC0](sounds/LICENSE), so you can use them in anything, with no credit needed.
 
-`sounds/en-us/marin/` has the 26 letter sounds of US English phonics (short vowels, hard C and G, X as /ks/, Q as /kw/), with `sounds.json` giving each clip's IPA, example words, and the exact prompt and take that produced it. Clips are mono 16-bit WAV, trimmed and level-matched. Entries with `"reviewed": true` were picked by a person; `"reviewed": false` passed the automatic checks but have not yet had a final listen. Each entry's `alts` lists alternate takes of the same sound (`<letter>-alt1.wav` and so on), also picked by a person, for apps that want variety.
+Made by [Purple Computer](https://purplecomputer.org).
+
+**[▶ Listen and download](https://purplecomputerorg.github.io/openlettersounds/)**
+
+## Use the sounds
+
+1. **Download** [the zip](https://purplecomputerorg.github.io/openlettersounds/openlettersounds-en-us-marin.zip), or grab single clips from the [library page](https://purplecomputerorg.github.io/openlettersounds/) or [`sounds/en-us/marin/`](sounds/en-us/marin/).
+2. **Play** `a.wav` through `z.wav`. Every clip is mono 16-bit WAV, trimmed to the sound and set to the same loudness, so they sit well side by side.
+3. **Optional:** read `sounds.json` for each clip's IPA, example words and alternate takes.
+
+What each letter says:
+
+- **Short vowels:** A as in apple, E as in egg, I as in itch, O as in octopus, U as in up.
+- **Hard C and G:** C as in cat, G as in goat.
+- **Q as /kw/** (queen) and **X as /ks/** (the end of fox).
+- Stops are clipped with no added "uh" (say "b", never "buh"); sounds like M and S are held.
+
+### `sounds.json`
+
+One entry per letter:
+
+```json
+{
+  "letter": "b",
+  "ipa": "/b/",
+  "kind": "stop",
+  "keywords": ["ball", "bat", "bed"],
+  "reviewed": true,
+  "file": "b.wav",
+  "alts": []
+}
+```
+
+- `reviewed: true` means a person listened and picked it. `false` means it passed the automatic checks but has not had a final listen yet.
+- `alts` lists alternate takes of the same sound (`b-alt1.wav` and so on), also picked by a person, for apps that want some variety.
+- `generator` and `judge` (not shown) record the exact prompt and take that produced the clip, so every sound can be traced back to its source.
+
+### Suggest alternates
+
+On the [library page](https://purplecomputerorg.github.io/openlettersounds/), turn on **Show new takes to suggest as alternates**, star the takes you like, and press **Send**. That opens a GitHub issue with your picks filled in.
+
+## Make the sounds yourself
+
+You need Python 3.11+, `ffmpeg` on your PATH, and an OpenAI API key. A Gemini key is optional (it makes the judge step better).
+
+```bash
+pip install -e .
+cp .env.example .env                           # add your OpenAI key (and GEMINI_API_KEY if you have one)
+python -m openlettersounds refs                # download reference recordings to refs/
+python -m openlettersounds generate b --takes 10
+python -m openlettersounds check b --judge     # reject bad takes, rank the rest, write the best to sounds/
+python -m openlettersounds page                # open build/review.html to listen
+```
+
+Leave off the letters (`b` above) to run all 26. Takes are cached by a hash of the model, voice and prompt, so rerunning is free, and editing a sound's spec starts a fresh set.
+
+| Command | What it does |
+|---|---|
+| `refs` | Download reference recordings to `refs/` (compared against, never shipped) |
+| `prompts [letters]` | Print the exact messages sent to the model |
+| `generate [letters] --takes N` | Record N new takes per sound |
+| `check [letters] [--judge]` | Gate and rank takes; `--judge` has an audio model re-rank the top six |
+| `pick < picks.txt` | Keep picks pasted from the page (`b: take 37` lines): a letter's first pick becomes its clip, later ones alternates |
+| `page` | Build `build/review.html`: references, passing takes, and rejected takes with reasons |
+| `site` | Build `docs/`: the public library page and zip (GitHub Pages serves `main /docs`) |
+| `all` | `refs`, `generate`, `check`, `page` and `site` in one go |
 
 ## How the sounds are made
 
@@ -55,24 +120,6 @@ The system message is the same for every sound. The user message changes with th
 | Glide | Q W X Y | the sound alone, stopped before any vowel (X is the /ks/ at the end of 'fox'); W and Y fully voiced, with only the faintest hint of a vowel | Letter W: produce the /w/ sound heard at the start of 'web', 'wet', 'wig': lips tightly rounded as for 'oo', voice on from the very start, gliding open into only the faintest clipped hint of a vowel, the way a teacher says it at the start of 'wet', about a quarter of a second. Fully voiced and clearly audible, never whispered or breathy. NOT a long 'wuh', or the letter name 'double-u'. |
 
 `python -m openlettersounds prompts` prints the system message and all 26 user messages exactly as sent.
-
-**[Listen and download](https://purplecomputerorg.github.io/openlettersounds/)**: every clip and alternate, a zip of the whole library, and new takes you can suggest as alternates through a GitHub issue.
-
-## Run it
-
-```bash
-pip install -e .                              # numpy, onnxruntime, httpx; ffmpeg on PATH
-python -m openlettersounds refs               # download references to refs/ (not redistributed)
-python -m openlettersounds prompts [letters]  # print the exact messages sent to the model
-cp .env.example .env                          # then put your OpenAI key in .env
-python -m openlettersounds generate [letters] --takes 10
-python -m openlettersounds check [letters] [--judge] # gate, rank (--judge: audio model re-ranks the top, needs the key), write the best take to sounds/
-python -m openlettersounds pick < picks.txt   # keep picks pasted from the page ("b: take 37" lines): first per letter is the clip, later ones alternates
-python -m openlettersounds page               # build/review.html
-python -m openlettersounds site               # docs/: the public library page and download zip (GitHub Pages, main /docs)
-```
-
-Takes are cached by a hash of the model, voice and prompt, so editing a sound's spec starts a fresh set and rerunning is free.
 
 ## Licenses
 
