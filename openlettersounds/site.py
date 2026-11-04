@@ -1,5 +1,6 @@
 """Public page for GitHub Pages, served from docs/: the library to play and download (one clip per letter sound,
-plus alternates), and each letter's latest passing takes for visitors to suggest as alternates."""
+plus alternates), and each letter's latest passing takes for visitors to suggest as alternates, or to download
+with the library as their own alternates (the page zips that in the browser, from the files served here)."""
 import json
 import shutil
 import zipfile
@@ -7,12 +8,11 @@ import zipfile
 from . import ROOT
 from .check import LIBRARY, META, REPORT
 from .generate import take_dir
-from .page import ogg
 from .sounds import SOUNDS
 
 OUT = ROOT / "docs"
-AUDIO = OUT / "audio"  # candidate takes, as small Vorbis files
-CLIPS = OUT / "sounds"  # library WAVs, as shipped
+AUDIO = OUT / "audio"  # candidate takes, as finished WAVs
+CLIPS = OUT / "sounds"  # the library as shipped: WAVs, metadata, license
 ZIP = f"openlettersounds-{LIBRARY.parent.name}-{LIBRARY.name}.zip"
 
 
@@ -30,8 +30,8 @@ def _letter(s, rows, entry):
     for r in rows:
         if not r["problems"] and not r.get("kept"):
             n = int(r["take"]) + 1
-            shutil.copyfile(ogg(ROOT / r["finished"]), AUDIO / f"{s.letter}-{n:02d}.ogg")
-            candidates.append(dict(n=n, file=f"audio/{s.letter}-{n:02d}.ogg"))
+            shutil.copyfile(ROOT / r["finished"], AUDIO / f"{s.letter}-{n:02d}.wav")
+            candidates.append(dict(n=n, file=f"audio/{s.letter}-{n:02d}.wav"))
     return dict(letter=s.letter, ipa=s.ipa, keywords=list(s.keywords), round=take_dir(s).name, library=library,
                 candidates=candidates)
 
@@ -50,12 +50,14 @@ def build():
     CLIPS.mkdir(parents=True, exist_ok=True)
     letters = [_letter(s, report.get(s.letter, []), library.get(s.letter)) for s in SOUNDS]
     wavs = [LIBRARY / c["file"].split("/")[-1] for e in letters for c in e["library"]]
-    for w in wavs:
-        shutil.copyfile(w, CLIPS / w.name)
-    _sync(CLIPS, {w.name for w in wavs})
+    files = [*wavs, META, LIBRARY.parent.parent / "LICENSE"]
+    for f in files:
+        shutil.copyfile(f, CLIPS / f.name)
+    _sync(CLIPS, {f.name for f in files})
     _sync(AUDIO, {c["file"].split("/")[-1] for e in letters for c in e["candidates"]})
-    _zip([*wavs, META, LIBRARY.parent.parent / "LICENSE"])
-    (OUT / "takes.json").write_text(json.dumps(dict(zip=ZIP, letters=letters), ensure_ascii=False))
+    _zip(files)
+    (OUT / "takes.json").write_text(json.dumps(dict(zip=ZIP, extras=[f"sounds/{f.name}" for f in files[len(wavs):]],
+                                                    letters=letters), ensure_ascii=False))
     shutil.copyfile(ROOT / "openlettersounds" / "site.html", OUT / "index.html")
     size = sum(f.stat().st_size for f in OUT.rglob("*") if f.is_file())
     print(OUT, len(wavs), "library clips,", sum(len(e["candidates"]) for e in letters), "candidates,", size // 1024, "KB")

@@ -30,6 +30,9 @@ a{color:var(--accent);text-underline-offset:3px}
 .actions{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin-top:6px}
 .btn{font:inherit;font-weight:700;border-radius:999px;padding:10px 22px;cursor:pointer;text-decoration:none;min-height:48px;display:inline-flex;align-items:center;gap:8px;border:0;color:var(--on-accent);background:var(--accent);transition:background .15s}
 .btn:hover{background:var(--accent-dark)}
+.btn.ghost{background:none;color:var(--accent);box-shadow:inset 0 0 0 2px var(--border)}
+.btn.ghost:hover{background:var(--fill)}
+.btn:disabled{opacity:.6;cursor:progress}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;display:grid;gap:14px;align-content:start;scroll-margin-top:16px;box-shadow:var(--shadow);transition:border-color .15s}
 .card:hover{border-color:var(--border)}
@@ -69,7 +72,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--magenta);outline-of
 .bar{display:none;position:fixed;inset:auto 0 0 0;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(8px);border-top:1px solid var(--border);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
 .bar.on{display:block}
 .bar div{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
-.bar span{flex:1 1 10em;color:var(--muted)}
+#count{flex:1 1 10em;color:var(--muted)}
 footer{color:var(--muted);font-size:.92rem;border-top:1px solid var(--line);padding-top:20px;display:flex;gap:12px;align-items:center}
 footer svg{width:32px;height:38px;flex:none}
 footer p{max-width:none}
@@ -93,8 +96,7 @@ footer p{max-width:none}
 <footer><svg viewBox="40 30 120 145" aria-hidden="true"><path d="M100 65A45 45 0 0 0 100 155Z" fill="#5c2d91"/><path d="M100 65A45 45 0 0 1 100 155Z" fill="#9b59d0"/><circle cx="100" cy="110" r="32" fill="#ebe2fd"/><circle cx="90" cy="106" r="5" fill="#5c2d91"/><circle cx="110" cy="106" r="5" fill="#5c2d91"/><path d="M88 120Q100 128 112 120" stroke="#5c2d91" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M85 68V50" stroke="#5c2d91" stroke-width="5" stroke-linecap="round"/><circle cx="85" cy="47" r="6" fill="#9b59d0"/><path d="M115 68V50" stroke="#9b59d0" stroke-width="5" stroke-linecap="round"/><circle cx="115" cy="47" r="6" fill="#5c2d91"/><circle cx="85" cy="160" r="10" fill="#5c2d91"/><circle cx="115" cy="160" r="10" fill="#9b59d0"/></svg><p>Made by <a href="https://purplecomputer.org">Purple Computer</a>. The voice is synthetic (OpenAI <code>gpt-audio-1.5</code>, voice marin). Each clip's exact prompt is in <code>sounds.json</code>, inside the zip.</p></footer>
 </main>
 <div class="bar"><div>
-<span id="count"></span>
-<button class="btn" id="send">Send alternate picks</button>
+<span id="count"></span><span class="picks"></span>
 </div></div>
 <dialog id="modal" aria-labelledby="modal-title"><div class="modal" id="modal-body"></div></dialog>
 <script>
@@ -125,6 +127,7 @@ const candClip=(l,c)=>`<span class="clip${mine(l).includes(c.n)?" mine":""}" dat
   <button class="side star" data-l="${l.letter}" data-n="${c.n}" aria-pressed="${mine(l).includes(c.n)}" aria-label="Suggest take ${c.n} as an alternate for ${l.letter.toUpperCase()}">★</button></span>`;
 const modal=document.getElementById("modal");
 let current=null; // the letter whose new takes the modal shows
+const pickButtons=`<button class="btn" data-download>⬇ Library + my picks (.zip)</button><button class="btn ghost" data-send>Send picks to us</button>`;
 const total=()=>letters.reduce((a,l)=>a+mine(l).length,0);
 const head=l=>`<span class="L">${l.letter.toUpperCase()}</span><div><span class="ipa">${l.ipa}</span><span class="ex">${l.keywords.join(", ")}</span></div>`;
 
@@ -139,6 +142,7 @@ function render(){
   const n=total();
   document.getElementById("count").textContent=`${n} alternate${n>1?"s":""} picked`;
   document.querySelector(".bar").classList.toggle("on",n>0);
+  document.querySelector(".bar .picks").innerHTML=pickButtons;
   if(current)renderModal();
 }
 
@@ -146,17 +150,18 @@ function renderModal(){
   const l=current,m=mine(l).length;
   document.getElementById("modal-body").innerHTML=`
   <div class="top"><div id="modal-title">${head(l)}</div><button class="close" data-close aria-label="Close">✕</button></div>
-  <p>New takes of ${l.letter.toUpperCase()} that passed the automatic checks, best guess first. Tap one to hear it, and tap ★ on any that would make a good alternate.</p>
+  <p>New takes of ${l.letter.toUpperCase()} that passed the automatic checks, best guess first. Tap one to hear it, and tap ★ on any you like. You can download the library with your picks added as alternates, and send them to us to suggest for everyone.</p>
   <div class="row">${l.candidates.map(c=>candClip(l,c)).join("")}</div>
   <div class="modal-foot"><span>${m?`${m} picked for ${l.letter.toUpperCase()}. Picks stay in this browser until you send them.`:""}</span>
-    ${total()?`<button class="btn" id="send">Send alternate picks</button>`:""}<button class="btn" data-close>Done</button></div>`;
+    ${total()?pickButtons:""}<button class="btn" data-close>Done</button></div>`;
 }
 
 document.addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
   if(b.dataset.open){current=letters.find(x=>x.letter===b.dataset.open);renderModal();modal.showModal();return}
   if(b.hasAttribute("data-close"))return modal.close();
-  if(b.id==="send")return send();
+  if(b.hasAttribute("data-send"))return send();
+  if(b.hasAttribute("data-download"))return download(b);
   const l=letters.find(x=>x.letter===b.dataset.l);if(!l)return;
   if(b.classList.contains("star")){const n=+b.dataset.n,m=mine(l);picks[l.round]=m.includes(n)?m.filter(x=>x!==n):[...m,n];save();render();
     modal.querySelector(`[data-n="${n}"]`).focus();return}
@@ -180,7 +185,43 @@ function send(){
   window.open(`${REPO}/issues/new?title=${encodeURIComponent(`Alternate picks (${lines.length} takes)`)}&body=${encodeURIComponent(body)}`,"_blank");
 }
 
-fetch("takes.json").then(r=>r.json()).then(d=>{letters=d.letters;document.getElementById("zip").href=d.zip;render()});
+// the library zip plus each picked take as another alternate, named like the picks ("a-take-36.wav")
+async function download(b){
+  const files=[...letters.flatMap(l=>[...l.library.map(c=>[name(c.file),c.file]),
+                                      ...mine(l).map(n=>[`${l.letter}-take-${n}.wav`,find(l,`c${n}`).file])]),
+               ...extras.map(f=>[name(f),f])];
+  b.disabled=true;
+  try{
+    const data=await Promise.all(files.map(async([n,f])=>{const r=await fetch(f);if(!r.ok)throw f;
+      return {name:`openlettersounds/${n}`,data:new Uint8Array(await r.arrayBuffer())}}));
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(zip(data));a.download=zipName.replace(/\.zip$/,"-with-picks.zip");a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),60000);
+  }catch(e){alert("Could not download every clip. Please try again.")}
+  finally{b.disabled=false}
+}
+
+// a minimal zip writer: entries stored uncompressed (WAVs barely shrink), dated 1980-01-01
+const CRC=[...Array(256)].map((_,c)=>{for(let k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;return c>>>0});
+const crc32=d=>{let c=-1;for(const x of d)c=CRC[(c^x)&255]^(c>>>8);return(c^-1)>>>0};
+const le=fields=>{const v=new DataView(new ArrayBuffer(fields.reduce((a,[,w])=>a+w,0)));let i=0;
+  for(const[x,w]of fields){w===2?v.setUint16(i,x,true):v.setUint32(i,x,true);i+=w}return new Uint8Array(v.buffer)};
+function zip(entries){
+  const local=[],central=[];let off=0;
+  for(const{name,data}of entries){
+    const nm=new TextEncoder().encode(name);
+    // shared by both headers: version needed, flags, method, time, date, crc, sizes, name and extra lengths
+    const common=[[20,2],[0,2],[0,2],[0,2],[33,2],[crc32(data),4],[data.length,4],[data.length,4],[nm.length,2],[0,2]];
+    local.push(le([[0x04034b50,4],...common]),nm,data);
+    central.push(le([[0x02014b50,4],[20,2],...common,[0,2],[0,2],[0,2],[0,4],[off,4]]),nm);
+    off+=30+nm.length+data.length;
+  }
+  const size=central.reduce((a,c)=>a+c.length,0),n=entries.length;
+  return new Blob([...local,...central,le([[0x06054b50,4],[0,2],[0,2],[n,2],[n,2],[size,4],[off,4],[0,2]])],{type:"application/zip"});
+}
+
+let zipName="",extras=[];
+fetch("takes.json").then(r=>r.json()).then(d=>{letters=d.letters;zipName=d.zip;extras=d.extras;document.getElementById("zip").href=d.zip;render()});
 </script>
 </body>
 </html>
